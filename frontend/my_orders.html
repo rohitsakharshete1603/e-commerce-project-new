@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders — Modern Furniture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    :root {
+      --wood-dark:#3D2314;--wood-mid:#7B4F2E;--wood-light:#C68642;
+      --gold:#D4A853;--cream:#FDF6EE;--cream-dark:#F0E0C8;--text-muted:#9a8478;
+    }
+
+    /* LAYOUT */
+    .orders-page { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+
+    /* FILTER BAR */
+    .filter-bar {
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+      background: white; padding: 1rem 1.5rem; border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(61,35,20,0.06); border: 1px solid var(--cream-dark);
+      margin-bottom: 1.5rem;
+    }
+    .filter-bar span { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin-right: 0.25rem; }
+    .filter-btn {
+      padding: 0.4rem 1rem; border-radius: 50px; border: 1.5px solid var(--cream-dark);
+      background: white; font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 500;
+      cursor: pointer; color: var(--text-muted); transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: var(--gold); color: var(--wood-dark); }
+    .filter-btn.active { background: var(--wood-dark); color: var(--gold); border-color: var(--wood-dark); }
+
+    /* ORDER CARD */
+    .order-card {
+      background: white; border-radius: 18px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(61,35,20,0.07); border: 1px solid var(--cream-dark);
+      margin-bottom: 1.25rem; transition: all 0.25s; cursor: pointer;
+    }
+    .order-card:hover { box-shadow: 0 8px 30px rgba(61,35,20,0.13); transform: translateY(-2px); }
+    .order-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 1.5rem; flex-wrap: wrap; gap: 0.75rem;
+      border-bottom: 1px solid var(--cream-dark);
+    }
+    .order-id { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .order-id span { font-family: monospace; color: var(--wood-mid); font-size: 0.88rem; }
+    .order-date { font-size: 0.8rem; color: var(--text-muted); }
+    .order-status { display: inline-flex; align-items: center; gap: 0.4rem; padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
+    .status-processing  { background: #e3f2fd; color: #1565c0; }
+    .status-confirmed   { background: #e8f5e9; color: #2e7d32; }
+    .status-shipped     { background: #fff8e1; color: #e65100; }
+    .status-delivered   { background: #e8f5e9; color: #1b5e20; }
+    .status-cancelled   { background: #fce4ec; color: #c62828; }
+
+    .order-body { padding: 1.25rem 1.5rem; }
+    .order-items { display: flex; flex-direction: column; gap: 0.75rem; }
+    .order-item { display: flex; align-items: center; gap: 1rem; }
+    .item-emoji { font-size: 2rem; width: 52px; height: 52px; background: var(--cream); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .item-info { flex: 1; min-width: 0; }
+    .item-name { font-weight: 600; font-size: 0.9rem; color: var(--wood-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .item-qty  { font-size: 0.78rem; color: var(--text-muted); }
+    .item-price { font-weight: 700; color: var(--wood-dark); font-size: 0.9rem; white-space: nowrap; }
+    .more-items { font-size: 0.78rem; color: var(--text-muted); padding: 0.5rem 0; }
+
+    .order-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; background: var(--cream); flex-wrap: wrap; gap: 0.5rem;
+    }
+    .order-total { font-weight: 700; color: var(--wood-dark); font-size: 0.95rem; }
+    .order-total span { font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+    .order-payment { font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem; }
+    .view-detail-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.5rem 1.1rem; background: var(--wood-dark); color: var(--gold);
+      border-radius: 50px; font-size: 0.8rem; font-weight: 600;
+      font-family: 'Jost', sans-serif; border: none; cursor: pointer; transition: all 0.2s;
+    }
+    .view-detail-btn:hover { background: var(--wood-mid); }
+
+    /* EMPTY STATE */
+    .empty-orders { text-align: center; padding: 5rem 2rem; }
+    .empty-orders i { font-size: 4rem; color: var(--cream-dark); margin-bottom: 1.5rem; display: block; }
+    .empty-orders h3 { color: var(--wood-dark); margin-bottom: 0.5rem; }
+    .empty-orders p { color: var(--text-muted); margin-bottom: 2rem; }
+
+    /* LOADING */
+    .loading-state { text-align: center; padding: 4rem; color: var(--text-muted); }
+    .spinner { width: 32px; height: 32px; border: 3px solid var(--cream-dark); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 1rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* DETAIL MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 999; align-items: center; justify-content: center; padding: 1rem; overflow-y: auto; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: white; border-radius: 20px; width: 100%; max-width: 640px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(0,0,0,0.3); animation: modalIn 0.3s ease; }
+    @keyframes modalIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-header { padding: 1.5rem; border-bottom: 1px solid var(--cream-dark); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: white; z-index: 2; }
+    .modal-header h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--wood-dark); }
+    .modal-close { width: 34px; height: 34px; border-radius: 50%; border: none; background: var(--cream); cursor: pointer; font-size: 1rem; color: #888; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .modal-close:hover { background: var(--cream-dark); }
+    .modal-body { padding: 1.5rem; }
+    .modal-section { margin-bottom: 1.75rem; }
+    .modal-section h4 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-weight: 600; margin-bottom: 1rem; border-bottom: 1px solid var(--cream-dark); padding-bottom: 0.5rem; }
+
+    /* TIMELINE */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .tl-step { display: flex; gap: 1rem; }
+    .tl-left { display: flex; flex-direction: column; align-items: center; gap: 0; }
+    .tl-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0; border: 2px solid var(--cream-dark); background: white; color: #ccc; }
+    .tl-dot.done  { background: var(--success, #27ae60); border-color: var(--success, #27ae60); color: white; }
+    .tl-dot.active { background: var(--gold); border-color: var(--gold); color: var(--wood-dark); }
+    .tl-line { width: 2px; flex: 1; background: var(--cream-dark); min-height: 24px; margin: 2px 0; }
+    .tl-line.done { background: var(--success, #27ae60); }
+    .tl-content { padding-bottom: 1.25rem; }
+    .tl-content strong { font-size: 0.88rem; color: var(--wood-dark); display: block; }
+    .tl-content span { font-size: 0.78rem; color: var(--text-muted); }
+
+    .detail-row { display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 0.88rem; border-bottom: 1px solid var(--cream-dark); }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-row .lbl { color: var(--text-muted); }
+    .detail-row .val { font-weight: 600; color: var(--wood-dark); text-align: right; max-width: 60%; }
+
+    @media (max-width: 600px) {
+      .filter-bar { gap: 0.5rem; }
+      .order-header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar-wrapper" id="navbar">
+  <div class="navbar-inner">
+    <a class="nav-brand" href="index.html">
+      <div class="brand-icon"><i class="fas fa-couch"></i></div>
+      Modern Furniture
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="product.html">Products</a>
+      <a href="category.html">Categories</a>
+      <a href="cart.html">Cart</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="cart.html" class="nav-cart"><i class="fas fa-shopping-cart"></i><span class="cart-badge">0</span></a>
+      <div class="user-menu-wrap" style="position:relative;">
+        <button class="nav-user-btn" id="userMenuBtn"
+          style="width:38px;height:38px;border-radius:50%;border:1.5px solid var(--cream-dark);background:var(--wood-dark);color:var(--gold);font-size:0.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+          <i class="fas fa-user"></i>
+        </button>
+        <div id="userDropdown" style="display:none;position:absolute;top:48px;right:0;background:white;border-radius:12px;box-shadow:0 12px 40px rgba(61,35,20,0.18);min-width:190px;padding:0.5rem;z-index:200;border:1px solid var(--cream-dark);">
+          <div id="ddUserName" style="padding:0.75rem 1rem;font-size:0.82rem;color:var(--text-muted);border-bottom:1px solid var(--cream-dark);font-weight:600;"></div>
+          <a href="profile.html" style="display:flex;align-items:center;gap:0.6rem;padding:0.7rem 1rem;font-size:0.88rem;color:var(--wood-dark);border-radius:8px;"><i class="fas fa-user-circle" style="color:var(--wood-mid);"></i> My Profile</a>
+          <a href="my-orders.html" style="display:flex;align-items:center;gap:0.6rem;padding:0.7rem 1rem;font-size:0.88rem;color:var(--wood-dark);border-radius:8px;"><i class="fas fa-shopping-bag" style="color:var(--wood-mid);"></i> My Orders</a>
+          <button onclick="logout()" style="display:flex;width:100%;align-items:center;gap:0.6rem;padding:0.7rem 1rem;font-size:0.88rem;color:#e54444;border-radius:8px;border:none;background:none;cursor:pointer;text-align:left;"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+      </div>
+      <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</div>
+
+<!-- BANNER -->
+<div class="page-banner">
+  <div class="container">
+    <h1>My Orders</h1>
+    <div class="breadcrumb-nav">
+      <a href="index.html">Home</a><span>/</span>
+      <a href="profile.html">My Account</a><span>/</span> Orders
+    </div>
+  </div>
+</div>
+
+<!-- ORDERS -->
+<section class="section section-light" style="min-height:60vh;">
+  <div class="orders-page">
+
+    <!-- FILTER -->
+    <div class="filter-bar">
+      <span>Filter:</span>
+      <button class="filter-btn active" onclick="filterOrders('all', this)">All</button>
+      <button class="filter-btn" onclick="filterOrders('Processing', this)">Processing</button>
+      <button class="filter-btn" onclick="filterOrders('Confirmed', this)">Confirmed</button>
+      <button class="filter-btn" onclick="filterOrders('Shipped', this)">Shipped</button>
+      <button class="filter-btn" onclick="filterOrders('Delivered', this)">Delivered</button>
+      <button class="filter-btn" onclick="filterOrders('Cancelled', this)">Cancelled</button>
+    </div>
+
+    <!-- LIST -->
+    <div id="ordersList">
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading your orders…</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ORDER DETAIL MODAL -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalOrderId">Order Details</h3>
+      <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand-name"><i class="fas fa-couch text-gold"></i> Modern Furniture</div>
+        <p>Quality furniture for your dream home.</p>
+      </div>
+      <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="product.html">Products</a></li></ul></div>
+      <div class="footer-col"><h5>Account</h5><ul><li><a href="profile.html">My Profile</a></li><li><a href="my-orders.html">My Orders</a></li></ul></div>
+      <div class="footer-col"><h5>Support</h5><ul><li><a href="#">FAQ</a></li><li><a href="#">Returns</a></li></ul></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;font-size:0.8rem;">
+      <span>© 2026 Modern Furniture. All Rights Reserved.</span>
+      <span>Made with ❤️ in Pune</span>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top"><i class="fas fa-chevron-up"></i></button>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/script.js"></script>
+<script>
+  if (!isLoggedIn()) window.location.href = 'login.html';
+
+  const API = 'http://localhost:5000/api';
+  let allOrders = [];
+
+  // Navbar
+  document.addEventListener('DOMContentLoaded', () => {
+    const user = getCurrentUser();
+    if (user) {
+      document.getElementById('ddUserName').textContent = '👋 Hi, ' + user.name.split(' ')[0];
+    }
+    const btn = document.getElementById('userMenuBtn');
+    const dd  = document.getElementById('userDropdown');
+    btn.addEventListener('click', e => { e.stopPropagation(); dd.style.display = dd.style.display === 'none' ? 'block' : 'none'; });
+    document.addEventListener('click', () => { dd.style.display = 'none'; });
+  });
+
+  // Load orders
+  async function loadOrders() {
+    const res  = await fetch(API + '/orders/myorders', { headers: { Authorization: 'Bearer ' + getToken() } });
+    const data = await res.json();
+    const list = document.getElementById('ordersList');
+
+    if (!data.success) { list.innerHTML = '<div class="empty-orders"><i class="fas fa-exclamation-circle"></i><h3>Could not load orders</h3><p>' + (data.message || 'Please try again') + '</p></div>'; return; }
+
+    allOrders = data.orders;
+    renderOrders(allOrders);
+  }
+
+  function statusClass(s) {
+    const m = { Processing: 'status-processing', Confirmed: 'status-confirmed', Shipped: 'status-shipped', Delivered: 'status-delivered', Cancelled: 'status-cancelled' };
+    return m[s] || 'status-processing';
+  }
+
+  function statusIcon(s) {
+    const m = { Processing: 'fa-clock', Confirmed: 'fa-check', Shipped: 'fa-truck', Delivered: 'fa-home', Cancelled: 'fa-times-circle' };
+    return m[s] || 'fa-clock';
+  }
+
+  function renderOrders(orders) {
+    const list = document.getElementById('ordersList');
+
+    if (!orders.length) {
+      list.innerHTML = `
+        <div class="empty-orders">
+          <i class="fas fa-shopping-bag"></i>
+          <h3>No orders found</h3>
+          <p>You haven't placed any orders yet. Start shopping!</p>
+          <a href="product.html" class="btn-primary-gold"><i class="fas fa-couch"></i> Browse Products</a>
+        </div>`;
+      return;
+    }
+
+    list.innerHTML = orders.map(o => {
+      const items    = o.items || [];
+      const showItems = items.slice(0, 2);
+      const extra    = items.length - 2;
+      const date     = new Date(o.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+      const shortId  = o._id.toString().slice(-8).toUpperCase();
+
+      return `
+        <div class="order-card" onclick="openOrder('${o._id}')">
+          <div class="order-header">
+            <div>
+              <div class="order-id">Order <span>#${shortId}</span></div>
+              <div class="order-date"><i class="fas fa-calendar-alt" style="margin-right:0.3rem;"></i>${date}</div>
+            </div>
+            <span class="order-status ${statusClass(o.status)}">
+              <i class="fas ${statusIcon(o.status)}"></i> ${o.status || 'Processing'}
+            </span>
+          </div>
+
+          <div class="order-body">
+            <div class="order-items">
+              ${showItems.map(i => `
+                <div class="order-item">
+                  <div class="item-emoji">${i.emoji || '🛋️'}</div>
+                  <div class="item-info">
+                    <div class="item-name">${i.name}</div>
+                    <div class="item-qty">Qty: ${i.quantity || 1}</div>
+                  </div>
+                  <div class="item-price">₹${Number((i.price || 0) * (i.quantity || 1)).toLocaleString('en-IN')}</div>
+                </div>`).join('')}
+              ${extra > 0 ? '<div class="more-items">+' + extra + ' more item(s)</div>' : ''}
+            </div>
+          </div>
+
+          <div class="order-footer">
+            <div>
+              <div class="order-total">Total: <span>₹${Number(o.totalAmount).toLocaleString('en-IN')}</span></div>
+              <div class="order-payment"><i class="fas fa-credit-card"></i> ${o.paymentMethod || 'COD'}</div>
+            </div>
+            <button class="view-detail-btn" onclick="event.stopPropagation(); openOrder('${o._id}')">
+              <i class="fas fa-eye"></i> View Details
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function filterOrders(status, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filtered = status === 'all' ? allOrders : allOrders.filter(o => o.status === status);
+    renderOrders(filtered);
+  }
+
+  // Order detail modal
+  function openOrder(id) {
+    const o = allOrders.find(x => x._id === id);
+    if (!o) return;
+
+    const shortId = o._id.toString().slice(-8).toUpperCase();
+    document.getElementById('modalOrderId').textContent = 'Order #' + shortId;
+
+    const date    = new Date(o.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+    const estDel  = o.estimatedDelivery ? new Date(o.estimatedDelivery).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '5–7 working days';
+    const addr    = o.deliveryAddress || {};
+    const items   = o.items || [];
+
+    // Timeline steps
+    const steps = ['Processing', 'Confirmed', 'Shipped', 'Delivered'];
+    const cancelled = o.status === 'Cancelled';
+    const currentIdx = cancelled ? -1 : steps.indexOf(o.status);
+
+    const timelineHtml = cancelled
+      ? `<div class="tl-step">
+           <div class="tl-left"><div class="tl-dot" style="background:#e74c3c;border-color:#e74c3c;color:white;"><i class="fas fa-times"></i></div></div>
+           <div class="tl-content"><strong>Order Cancelled</strong><span>This order has been cancelled</span></div>
+         </div>`
+      : steps.map((step, i) => {
+          const done   = i < currentIdx;
+          const active = i === currentIdx;
+          const icons  = ['fa-box', 'fa-check-circle', 'fa-truck', 'fa-home'];
+          const descs  = ['Order received and being prepared', 'Order confirmed by our team', 'Your order is on the way!', 'Delivered to your doorstep'];
+          return `
+            <div class="tl-step">
+              <div class="tl-left">
+                <div class="tl-dot ${done ? 'done' : active ? 'active' : ''}"><i class="fas ${done ? 'fa-check' : icons[i]}"></i></div>
+                ${i < steps.length - 1 ? '<div class="tl-line ' + (done ? 'done' : '') + '"></div>' : ''}
+              </div>
+              <div class="tl-content">
+                <strong>${step}</strong>
+                <span>${active || done ? descs[i] : 'Pending'}</span>
+              </div>
+            </div>`;
+        }).join('');
+
+    document.getElementById('modalBody').innerHTML = `
+      <!-- Timeline -->
+      <div class="modal-section">
+        <h4><i class="fas fa-route" style="margin-right:0.4rem;color:var(--gold);"></i>Order Status</h4>
+        <div class="timeline">${timelineHtml}</div>
+      </div>
+
+      <!-- Items -->
+      <div class="modal-section">
+        <h4><i class="fas fa-box-open" style="margin-right:0.4rem;color:var(--gold);"></i>Items Ordered</h4>
+        ${items.map(i => `
+          <div style="display:flex;align-items:center;gap:0.9rem;padding:0.6rem 0;border-bottom:1px solid var(--cream-dark);">
+            <div style="width:48px;height:48px;background:var(--cream);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">${i.emoji || '🛋️'}</div>
+            <div style="flex:1;">
+              <div style="font-weight:600;font-size:0.88rem;color:var(--wood-dark);">${i.name}</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">Qty: ${i.quantity || 1} × ₹${Number(i.price || 0).toLocaleString('en-IN')}</div>
+            </div>
+            <div style="font-weight:700;font-size:0.9rem;">₹${Number((i.price || 0) * (i.quantity || 1)).toLocaleString('en-IN')}</div>
+          </div>`).join('')}
+      </div>
+
+      <!-- Payment Summary -->
+      <div class="modal-section">
+        <h4><i class="fas fa-receipt" style="margin-right:0.4rem;color:var(--gold);"></i>Payment Summary</h4>
+        <div class="detail-row"><span class="lbl">Subtotal</span><span class="val">₹${Number(o.subtotal || 0).toLocaleString('en-IN')}</span></div>
+        <div class="detail-row"><span class="lbl">Delivery</span><span class="val" style="color:${o.deliveryCharge === 0 ? '#27ae60' : 'inherit'}">${o.deliveryCharge === 0 ? 'FREE' : '₹' + o.deliveryCharge}</span></div>
+        <div class="detail-row"><span class="lbl" style="font-weight:700;">Total Paid</span><span class="val" style="font-size:1rem;color:var(--wood-dark);">₹${Number(o.totalAmount).toLocaleString('en-IN')}</span></div>
+        <div class="detail-row"><span class="lbl">Payment Method</span><span class="val">${o.paymentMethod || 'COD'}</span></div>
+        <div class="detail-row"><span class="lbl">Order Date</span><span class="val">${date}</span></div>
+        <div class="detail-row"><span class="lbl">Est. Delivery</span><span class="val" style="color:var(--wood-mid);">${estDel}</span></div>
+      </div>
+
+      <!-- Delivery Address -->
+      ${addr.name ? `
+      <div class="modal-section">
+        <h4><i class="fas fa-map-marker-alt" style="margin-right:0.4rem;color:var(--gold);"></i>Delivery Address</h4>
+        <div style="background:var(--cream);border-radius:12px;padding:1rem 1.25rem;font-size:0.88rem;color:var(--wood-dark);line-height:1.8;">
+          <strong>${addr.name}</strong><br>
+          ${addr.phone ? addr.phone + '<br>' : ''}
+          ${addr.street ? addr.street + ', ' : ''}${addr.city || ''} – ${addr.pincode || ''}<br>
+          ${addr.state || ''}, India
+        </div>
+      </div>` : ''}
+
+      <!-- Notes -->
+      ${o.notes ? `<div class="modal-section"><h4><i class="fas fa-sticky-note" style="margin-right:0.4rem;color:var(--gold);"></i>Order Notes</h4><p style="font-size:0.88rem;color:var(--text-muted);background:var(--cream);padding:0.75rem 1rem;border-radius:10px;">${o.notes}</p></div>` : ''}
+    `;
+
+    document.getElementById('orderModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('orderModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('orderModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  loadOrders();
+</script>
+</body>
+</html>

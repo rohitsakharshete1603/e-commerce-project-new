@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Modern Furniture — Quality Furniture at Best Prices in Pune, Maharashtra.">
+  <title>Modern Furniture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- ======= NAVBAR ======= -->
+  <div class="navbar-wrapper" id="navbar">
+    <div class="navbar-inner">
+      <a class="nav-brand" href="index.html">
+        <div class="brand-icon"><i class="fas fa-couch"></i></div>
+        Modern Furniture
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="product.html">Products</a>
+        <a href="category.html">Categories</a>
+        <a href="cart.html">Cart</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="nav-search-btn" title="Search"><i class="fas fa-search"></i></button>
+        <a href="cart.html" class="nav-cart" title="Cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-badge">0</span>
+        </a>
+        <!-- User menu -->
+        <div class="user-menu-wrap" id="userMenuWrap" style="position:relative;">
+          <button class="nav-user-btn" id="userMenuBtn" title="Account"
+            style="width:38px;height:38px;border-radius:50%;border:1.5px solid var(--cream-dark);
+                   background:var(--wood-dark);color:var(--gold);font-size:0.85rem;cursor:pointer;
+                   display:flex;align-items:center;justify-content:center;transition:all 0.3s;">
+            <i class="fas fa-user"></i>
+          </button>
+          <div id="userDropdown" style="display:none;position:absolute;top:48px;right:0;
+               background:white;border-radius:12px;box-shadow:0 12px 40px rgba(61,35,20,0.18);
+               min-width:180px;padding:0.5rem;z-index:200;border:1px solid var(--cream-dark);">
+            <div id="userNameLabel" style="padding:0.75rem 1rem;font-size:0.82rem;
+                 color:var(--text-muted);border-bottom:1px solid var(--cream-dark);font-weight:600;"></div>
+            <a href="#" style="display:flex;align-items:center;gap:0.6rem;padding:0.7rem 1rem;
+               font-size:0.88rem;color:var(--wood-dark);border-radius:8px;transition:all 0.2s;"
+               onmouseover="this.style.background='var(--cream)'" onmouseout="this.style.background='transparent'">
+              <i class="fas fa-user-circle" style="color:var(--wood-mid);"></i> My Profile
+            </a>
+            <a href="login.html" id="navLoginLink" style="display:flex;align-items:center;gap:0.6rem;padding:0.7rem 1rem;
+               font-size:0.88rem;color:var(--wood-dark);border-radius:8px;transition:all 0.2s;">
+              <i class="fas fa-sign-in-alt" style="color:var(--wood-mid);"></i> Login / Register
+            </a>
+            <a href="#" id="navOrdersLink" style="display:none;flex;align-items:center;gap:0.6rem;padding:0.7rem 1rem;
+               font-size:0.88rem;color:var(--wood-dark);border-radius:8px;transition:all 0.2s;">
+              <i class="fas fa-box" style="color:var(--wood-mid);"></i> My Orders
+            </a>
+            <button onclick="logout()" style="display:flex;align-items:center;gap:0.6rem;
+               padding:0.7rem 1rem;font-size:0.88rem;color:#e54444;border-radius:8px;
+               border:none;background:none;cursor:pointer;width:100%;transition:all 0.2s;"
+               onmouseover="this.style.background='#fff0f0'" onmouseout="this.style.background='transparent'">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </div>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= MOBILE MENU ======= -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-menu-panel">
+      <button class="mobile-close"><i class="fas fa-times"></i></button>
+      <a class="mobile-nav-link" href="index.html"><i class="fas fa-home fa-fw me-2"></i> Home</a>
+      <a class="mobile-nav-link" href="product.html"><i class="fas fa-box fa-fw me-2"></i> Products</a>
+      <a class="mobile-nav-link" href="category.html"><i class="fas fa-th-large fa-fw me-2"></i> Categories</a>
+      <a class="mobile-nav-link" href="cart.html"><i class="fas fa-shopping-cart fa-fw me-2"></i> Cart</a>
+      <a class="mobile-nav-link" href="#" onclick="logout()"><i class="fas fa-sign-out-alt fa-fw me-2"></i> Logout</a>
+    </div>
+  </div>
+
+  <!-- ======= HERO / SLIDER ======= -->
+  <section class="hero" id="hero">
+    <div class="hero-slide hero-slide-1 active">
+      <div class="hero-pattern"></div>
+      <div class="hero-content">
+        <div class="hero-tag">New Collection 2026</div>
+        <h1>Furnish Your Dream Home in Style</h1>
+        <p>Handcrafted furniture with premium materials. Delivered to your doorstep across Pune.</p>
+        <div class="hero-btns">
+          <a href="product.html" class="btn-primary-gold"><i class="fas fa-arrow-right"></i> Shop Now</a>
+          <a href="category.html" class="btn-outline-white">Browse Categories</a>
+        </div>
+      </div>
+      <div class="hero-deco">
+        <div class="hero-deco-card">
+          <div class="deco-emoji">🛋️</div>
+          <div class="deco-label">Best Seller</div>
+          <div class="deco-val">Sofa Sets</div>
+        </div>
+        <div class="hero-deco-card">
+          <div class="deco-emoji">⭐</div>
+          <div class="deco-label">Rating</div>
+          <div class="deco-val">4.9 / 5</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-slide hero-slide-2">
+      <div class="hero-pattern"></div>
+      <div class="hero-content">
+        <div class="hero-tag">New Arrivals</div>
+        <h1>Modern Bedroom Collections Have Arrived</h1>
+        <p>Transform your bedroom into a serene sanctuary with our premium beds and wardrobes.</p>
+        <div class="hero-btns">
+          <a href="product.html" class="btn-primary-gold"><i class="fas fa-bed"></i> View Bedroom</a>
+          <a href="category.html" class="btn-outline-white">All Categories</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-slide hero-slide-3">
+      <div class="hero-pattern"></div>
+      <div class="hero-content">
+        <div class="hero-tag">🎉 Big Sale — Up to 50% Off</div>
+        <h1>Massive Savings on Selected Pieces</h1>
+        <p>Limited time offers on dining sets, office furniture, and living room collections.</p>
+        <div class="hero-btns">
+          <a href="product.html" class="btn-primary-gold"><i class="fas fa-tags"></i> Grab Deals</a>
+          <a href="cart.html" class="btn-outline-white">View Cart</a>
+        </div>
+      </div>
+    </div>
+    <button class="hero-arrow prev"><i class="fas fa-chevron-left"></i></button>
+    <button class="hero-arrow next"><i class="fas fa-chevron-right"></i></button>
+    <div class="hero-controls">
+      <button class="hero-dot active"></button>
+      <button class="hero-dot"></button>
+      <button class="hero-dot"></button>
+    </div>
+  </section>
+
+  <!-- ======= STATS ======= -->
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item"><div class="stat-num">2,400+</div><div class="stat-label">Happy Customers</div></div>
+        <div class="stat-item"><div class="stat-num">350+</div><div class="stat-label">Products</div></div>
+        <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">Years Experience</div></div>
+        <div class="stat-item"><div class="stat-num">4.9★</div><div class="stat-label">Average Rating</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= CATEGORIES ======= -->
+  <section class="section section-light" id="categories">
+    <div class="container">
+      <div class="section-header">
+        <div class="tag">Browse by Room</div>
+        <h2>Shop By Category</h2>
+        <p>Find the perfect furniture for every corner of your home.</p>
+        <div class="section-divider"></div>
+      </div>
+      <div class="categories-grid">
+        <a href="category.html" class="category-card"><div class="cat-bg cat-bg-1"></div><div class="cat-icon">🛋️</div><div class="cat-content"><h3>Living Room</h3><span>48 Products</span></div></a>
+        <a href="category.html" class="category-card"><div class="cat-bg cat-bg-2"></div><div class="cat-icon">🛏️</div><div class="cat-content"><h3>Bedroom</h3><span>62 Products</span></div></a>
+        <a href="category.html" class="category-card"><div class="cat-bg cat-bg-3"></div><div class="cat-icon">🍽️</div><div class="cat-content"><h3>Dining Room</h3><span>34 Products</span></div></a>
+        <a href="category.html" class="category-card"><div class="cat-bg cat-bg-4"></div><div class="cat-icon">🪑</div><div class="cat-content"><h3>Office</h3><span>29 Products</span></div></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= PRODUCTS ======= -->
+  <section class="section section-white" id="products">
+    <div class="container">
+      <div class="section-header">
+        <div class="tag">Hand Picked</div>
+        <h2>Latest Products</h2>
+        <p>Quality pieces crafted for comfort, elegance, and longevity.</p>
+        <div class="section-divider"></div>
+      </div>
+      <div class="products-grid">
+        <div class="product-card" data-id="p1" data-name="Luxury Sofa Set" data-price="15999" data-emoji="🛋️">
+          <div class="product-img-wrap"><span class="product-badge badge-new">New</span><div class="product-emoji">🛋️</div><div class="product-actions-hover"><button class="action-icon-btn" title="Quick View"><i class="fas fa-eye"></i></button><button class="action-icon-btn" title="Wishlist"><i class="fas fa-heart"></i></button></div></div>
+          <div class="product-body"><div class="product-meta">Living Room</div><a href="product_detail.html?id=p1" class="product-name">Luxury Sofa Set</a><div class="product-stars">★★★★☆ <span>(128 reviews)</span></div><div class="product-footer"><div><span class="product-price">₹15,999</span><span class="product-old-price">₹22,000</span></div><button class="add-cart-btn"><i class="fas fa-cart-plus"></i> Add</button></div></div>
+        </div>
+        <div class="product-card" data-id="p2" data-name="King Size Bed" data-price="12999" data-emoji="🛏️">
+          <div class="product-img-wrap"><span class="product-badge badge-best">Best Seller</span><div class="product-emoji">🛏️</div><div class="product-actions-hover"><button class="action-icon-btn" title="Quick View"><i class="fas fa-eye"></i></button><button class="action-icon-btn" title="Wishlist"><i class="fas fa-heart"></i></button></div></div>
+          <div class="product-body"><div class="product-meta">Bedroom</div><a href="product_detail.html?id=p1" class="product-name">King Size Bed</a><div class="product-stars">★★★★★ <span>(95 reviews)</span></div><div class="product-footer"><div><span class="product-price">₹12,999</span><span class="product-old-price">₹18,000</span></div><button class="add-cart-btn"><i class="fas fa-cart-plus"></i> Add</button></div></div>
+        </div>
+        <div class="product-card" data-id="p3" data-name="Ergonomic Office Chair" data-price="2999" data-emoji="🪑">
+          <div class="product-img-wrap"><span class="product-badge badge-sale">Sale</span><div class="product-emoji">🪑</div><div class="product-actions-hover"><button class="action-icon-btn" title="Quick View"><i class="fas fa-eye"></i></button><button class="action-icon-btn" title="Wishlist"><i class="fas fa-heart"></i></button></div></div>
+          <div class="product-body"><div class="product-meta">Office</div><a href="product_detail.html?id=p1" class="product-name">Ergonomic Office Chair</a><div class="product-stars">★★★☆☆ <span>(47 reviews)</span></div><div class="product-footer"><div><span class="product-price">₹2,999</span><span class="product-old-price">₹4,500</span></div><button class="add-cart-btn"><i class="fas fa-cart-plus"></i> Add</button></div></div>
+        </div>
+        <div class="product-card" data-id="p4" data-name="Wardrobe 4-Door" data-price="18999" data-emoji="🚪">
+          <div class="product-img-wrap"><span class="product-badge badge-new">New</span><div class="product-emoji">🚪</div><div class="product-actions-hover"><button class="action-icon-btn" title="Quick View"><i class="fas fa-eye"></i></button><button class="action-icon-btn" title="Wishlist"><i class="fas fa-heart"></i></button></div></div>
+          <div class="product-body"><div class="product-meta">Bedroom</div><a href="product_detail.html?id=p1" class="product-name">Wardrobe 4-Door</a><div class="product-stars">★★★★★ <span>(212 reviews)</span></div><div class="product-footer"><div><span class="product-price">₹18,999</span><span class="product-old-price">₹25,000</span></div><button class="add-cart-btn"><i class="fas fa-cart-plus"></i> Add</button></div></div>
+        </div>
+        <div class="product-card" data-id="p5" data-name="Dining Table 6-Seater" data-price="9999" data-emoji="🍽️">
+          <div class="product-img-wrap"><span class="product-badge badge-sale">Sale</span><div class="product-emoji">🍽️</div><div class="product-actions-hover"><button class="action-icon-btn" title="Quick View"><i class="fas fa-eye"></i></button><button class="action-icon-btn" title="Wishlist"><i class="fas fa-heart"></i></button></div></div>
+          <div class="product-body"><div class="product-meta">Dining Room</div><a href="product_detail.html?id=p1" class="product-name">Dining Table 6-Seater</a><div class="product-stars">★★★★☆ <span>(78 reviews)</span></div><div class="product-footer"><div><span class="product-price">₹9,999</span><span class="product-old-price">₹14,000</span></div><button class="add-cart-btn"><i class="fas fa-cart-plus"></i> Add</button></div></div>
+        </div>
+        <div class="product-card" data-id="p6" data-name="Dressing Table with Mirror" data-price="5999" data-emoji="🪞">
+          <div class="product-img-wrap"><span class="product-badge badge-best">Best Seller</span><div class="product-emoji">🪞</div><div class="product-actions-hover"><button class="action-icon-btn" title="Quick View"><i class="fas fa-eye"></i></button><button class="action-icon-btn" title="Wishlist"><i class="fas fa-heart"></i></button></div></div>
+          <div class="product-body"><div class="product-meta">Bedroom</div><a href="product_detail.html?id=p1" class="product-name">Dressing Table with Mirror</a><div class="product-stars">★★★★☆ <span>(63 reviews)</span></div><div class="product-footer"><div><span class="product-price">₹5,999</span><span class="product-old-price">₹8,500</span></div><button class="add-cart-btn"><i class="fas fa-cart-plus"></i> Add</button></div></div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top: 3rem;">
+        <a href="product.html" class="btn-primary-gold">View All Products <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= FEATURES ======= -->
+  <section class="section section-light">
+    <div class="container">
+      <div class="section-header">
+        <div class="tag">Why Choose Us</div>
+        <h2>Our Promise to You</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-truck"></i></div><h4>Free Delivery</h4><p>Free home delivery on all orders above ₹5,000 across Pune and surrounding areas.</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><h4>Secure Payment</h4><p>100% secure transactions. We accept UPI, debit/credit cards, and Cash on Delivery.</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-headset"></i></div><h4>24/7 Support</h4><p>Our dedicated team is available round the clock to assist you with any queries.</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-undo"></i></div><h4>Easy Returns</h4><p>Not satisfied? Return any product within 7 days — no questions asked.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= TESTIMONIALS ======= -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-header">
+        <div class="tag" style="color:var(--gold);">Customer Love</div>
+        <h2 style="color:white;">What Our Customers Say</h2>
+        <p style="color:rgba(255,255,255,0.6);">Real feedback from real Pune families who trusted us.</p>
+        <div class="section-divider"></div>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"We bought a complete living room set from Laxmi Bhandi. Outstanding quality and on-time delivery. Our guests always compliment the sofa!"</p><div class="testimonial-author"><div class="author-avatar">P</div><div><div class="author-name">Priya Sharma</div><div class="author-city">Kothrud, Pune</div></div></div></div>
+        <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><p class="testimonial-text">"Best furniture showroom in Pune! The wardrobe is sturdy, well-finished, and exactly as shown. Great prices compared to branded stores."</p><div class="testimonial-author"><div class="author-avatar">R</div><div><div class="author-name">Rahul Patil</div><div class="author-city">Baner, Pune</div></div></div></div>
+        <div class="testimonial-card"><div class="testimonial-stars">★★★★☆</div><p class="testimonial-text">"The dining table set we ordered is beautiful! Solid wood, great finish. The team was very helpful and assisted with installation too."</p><div class="testimonial-author"><div class="author-avatar">A</div><div><div class="author-name">Anjali More</div><div class="author-city">Wakad, Pune</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= NEWSLETTER ======= -->
+  <section class="newsletter">
+    <div class="container">
+      <div class="newsletter-content">
+        <h2>Get Exclusive Deals & Updates</h2>
+        <p>Subscribe and be the first to know about new arrivals, sales, and special offers.</p>
+        <div class="newsletter-form">
+          <input type="email" id="nlEmail" placeholder="Enter your email address...">
+          <button onclick="subscribeNewsletter()">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= FOOTER ======= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-name"><i class="fas fa-couch text-gold"></i> Modern Furniture</div>
+          <p>Quality furniture for your dream home. Serving Pune families since 2012 with premium craftsmanship and unbeatable prices.</p>
+          <p><i class="fas fa-map-marker-alt" style="color:var(--gold);margin-right:0.5rem;"></i>Pune, Maharashtra, India</p>
+          <p><i class="fas fa-phone" style="color:var(--gold);margin-right:0.5rem;"></i>+91 98765 43210</p>
+          <div class="footer-socials" style="margin-top:1rem;">
+            <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+            <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="product.html">Products</a></li><li><a href="category.html">Categories</a></li><li><a href="#">Offers & Discounts</a></li></ul></div>
+        <div class="footer-col"><h5>Categories</h5><ul><li><a href="#">Living Room</a></li><li><a href="#">Bedroom</a></li><li><a href="#">Dining Room</a></li><li><a href="#">Office Furniture</a></li><li><a href="#">Kids Room</a></li></ul></div>
+        <div class="footer-col"><h5>Support</h5><ul><li><a href="#">FAQ</a></li><li><a href="#">Terms & Conditions</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Return Policy</a></li></ul></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;font-size:0.8rem;">
+        <span>© 2026 Laxmi Bhandi & Furniture Showroom. All Rights Reserved.</span>
+        <span>Made with ❤️ in Pune, Maharashtra</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top" title="Back to top"><i class="fas fa-chevron-up"></i></button>
+
+  <!-- Load api.js FIRST, then script.js -->
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script>
+    // ── Session guard — non-blocking, graceful ──
+    (async function() {
+      const token = getToken();
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
+      }
+      // Verify in background — don't block page load
+      const data = await getMe();
+      if (!data.success) {
+        clearAuth();
+        window.location.href = 'login.html';
+      }
+    })();
+
+    // ── Show logged-in user name in navbar ──
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = getCurrentUser();
+      if (user) {
+        const label = document.getElementById('userNameLabel');
+        if (label) label.textContent = `👋 Hi, ${user.name.split(' ')[0]}`;
+      }
+
+      // User menu dropdown toggle
+      const btn = document.getElementById('userMenuBtn');
+      const dropdown = document.getElementById('userDropdown');
+      if (btn && dropdown) {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        });
+        document.addEventListener('click', () => { dropdown.style.display = 'none'; });
+      }
+    });
+
+    function subscribeNewsletter() {
+      const email = document.getElementById('nlEmail').value.trim();
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+      alert('✅ Thank you for subscribing! You\'ll receive our latest offers soon.');
+      document.getElementById('nlEmail').value = '';
+    }
+  </script>
+<script>
+  // Show login or orders link based on login state
+  document.addEventListener('DOMContentLoaded', () => {
+    const user = getCurrentUser();
+    const loginLink  = document.getElementById('navLoginLink');
+    const ordersLink = document.getElementById('navOrdersLink');
+    if (loginLink && user) loginLink.style.display = 'none';
+    if (ordersLink && user) ordersLink.style.display = 'flex';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products — Modern Furniture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar-wrapper" id="navbar">
+    <div class="navbar-inner">
+      <a class="nav-brand" href="index.html">
+        <div class="brand-icon"><i class="fas fa-couch"></i></div>
+        Modern Furniture
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="product.html" class="active">Products</a>
+        <a href="category.html">Categories</a>
+        <a href="cart.html">Cart</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="nav-search-btn" title="Search"><i class="fas fa-search"></i></button>
+        <a href="cart.html" class="nav-cart" title="Cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-badge">0</span>
+        </a>
+        <div class="user-menu-wrap" style="position:relative;">
+          <button class="nav-user-btn" id="userMenuBtn" title="Account"
+            style="width:38px;height:38px;border-radius:50%;border:1.5px solid var(--cream-dark);background:var(--wood-dark);color:var(--gold);font-size:0.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+            <i class="fas fa-user"></i>
+          </button>
+          <div id="userDropdown" style="display:none;position:absolute;top:48px;right:0;background:white;border-radius:12px;box-shadow:0 12px 40px rgba(61,35,20,0.18);min-width:180px;padding:0.5rem;z-index:200;border:1px solid var(--cream-dark);">
+            <div id="userNameLabel" style="padding:0.75rem 1rem;font-size:0.82rem;color:var(--text-muted);border-bottom:1px solid var(--cream-dark);font-weight:600;"></div>
+            <a href="login.html" id="navLoginLink" style="display:flex;align-items:center;gap:0.6rem;padding:0.7rem 1rem;font-size:0.88rem;color:var(--wood-dark);border-radius:8px;">
+              <i class="fas fa-sign-in-alt" style="color:var(--wood-mid);"></i> Login / Register
+            </a>
+            <button onclick="logout()" id="navLogoutBtn" style="display:none;align-items:center;gap:0.6rem;padding:0.7rem 1rem;font-size:0.88rem;color:#e54444;border-radius:8px;border:none;background:none;cursor:pointer;width:100%;text-align:left;">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </div>
+        </div>
+        <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-menu-panel">
+      <button class="mobile-close"><i class="fas fa-times"></i></button>
+      <a class="mobile-nav-link" href="index.html">Home</a>
+      <a class="mobile-nav-link" href="product.html">Products</a>
+      <a class="mobile-nav-link" href="category.html">Categories</a>
+      <a class="mobile-nav-link" href="cart.html">Cart</a>
+      <a class="mobile-nav-link" href="#" onclick="logout()">Logout</a>
+    </div>
+  </div>
+
+  <!-- PAGE BANNER -->
+  <div class="page-banner">
+    <div class="container">
+      <h1>Our Products</h1>
+      <div class="breadcrumb-nav">
+        <a href="index.html">Home</a><span>/</span> Products
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCTS LAYOUT -->
+  <section class="section section-light">
+    <div class="container">
+      <div class="products-layout">
+
+        <!-- FILTER SIDEBAR -->
+        <aside class="filter-sidebar">
+          <h3><i class="fas fa-sliders-h" style="color:var(--gold);margin-right:0.5rem;"></i>Filters</h3>
+          <div class="filter-group">
+            <h5>Category</h5>
+            <label class="filter-item"><input type="checkbox" class="cat-filter" value="Living Room"> Living Room</label>
+            <label class="filter-item"><input type="checkbox" class="cat-filter" value="Bedroom"> Bedroom</label>
+            <label class="filter-item"><input type="checkbox" class="cat-filter" value="Dining Room"> Dining Room</label>
+            <label class="filter-item"><input type="checkbox" class="cat-filter" value="Office"> Office</label>
+            <label class="filter-item"><input type="checkbox" class="cat-filter" value="Kids Room"> Kids Room</label>
+          </div>
+          <div class="filter-group">
+            <h5>Price Range</h5>
+            <div class="price-range">
+              <input type="range" id="price-range" min="1000" max="50000" value="50000">
+              <div class="price-display">
+                <span>₹1,000</span>
+                <span id="price-val">₹50,000</span>
+              </div>
+            </div>
+          </div>
+          <div class="filter-group">
+            <h5>Sort By</h5>
+            <label class="filter-item"><input type="radio" name="sort" value="" checked> Featured</label>
+            <label class="filter-item"><input type="radio" name="sort" value="price_asc"> Price: Low to High</label>
+            <label class="filter-item"><input type="radio" name="sort" value="price_desc"> Price: High to Low</label>
+            <label class="filter-item"><input type="radio" name="sort" value="newest"> Newest First</label>
+            <label class="filter-item"><input type="radio" name="sort" value="rating"> Best Rated</label>
+          </div>
+          <button class="checkout-btn" style="border-radius:8px;padding:0.75rem;" onclick="applyFilters()">
+            <i class="fas fa-filter"></i> Apply Filters
+          </button>
+          <button style="width:100%;margin-top:0.5rem;padding:0.6rem;border:1.5px solid var(--cream-dark);border-radius:8px;background:white;cursor:pointer;font-family:'Jost',sans-serif;color:var(--text-muted);" onclick="resetFilters()">
+            <i class="fas fa-times"></i> Reset
+          </button>
+        </aside>
+
+        <!-- PRODUCT GRID -->
+        <div>
+          <div class="sort-bar">
+            <p id="product-count">Loading products…</p>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              <input type="text" id="searchInput" placeholder="Search products…"
+                style="padding:0.55rem 1rem;border:1.5px solid var(--cream-dark);border-radius:50px;font-family:'Jost',sans-serif;font-size:0.88rem;outline:none;"
+                onkeydown="if(event.key==='Enter') applyFilters()">
+              <button onclick="applyFilters()" style="padding:0.55rem 1rem;background:var(--wood-dark);color:var(--gold);border:none;border-radius:50px;cursor:pointer;font-family:'Jost',sans-serif;">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="products-grid" id="productsGrid">
+            <div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--text-muted);">
+              <i class="fas fa-spinner fa-spin fa-2x"></i>
+              <p style="margin-top:1rem;">Loading products…</p>
+            </div>
+          </div>
+
+          <div id="pagination" style="display:flex;justify-content:center;gap:0.5rem;margin-top:3rem;flex-wrap:wrap;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-name"><i class="fas fa-couch text-gold"></i> Modern Furniture</div>
+          <p>Quality furniture for your dream home. Serving Pune families since 2012.</p>
+        </div>
+        <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="product.html">Products</a></li><li><a href="category.html">Categories</a></li></ul></div>
+        <div class="footer-col"><h5>Categories</h5><ul><li><a href="category.html">Living Room</a></li><li><a href="category.html">Bedroom</a></li><li><a href="category.html">Dining Room</a></li></ul></div>
+        <div class="footer-col"><h5>Support</h5><ul><li><a href="#">FAQ</a></li><li><a href="#">Returns</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;font-size:0.8rem;">
+        <span>© 2026 Modern Furniture. All Rights Reserved.</span>
+        <span>Made with ❤️ in Pune</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top"><i class="fas fa-chevron-up"></i></button>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script>
+    let currentPage = 1;
+    let currentFilters = {};
+
+    // Read URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('category')) {
+      const val = urlParams.get('category');
+      document.querySelectorAll('.cat-filter').forEach(cb => {
+        if (cb.value === val) cb.checked = true;
+      });
+      currentFilters.category = val;
+    }
+    if (urlParams.get('search')) {
+      document.getElementById('searchInput').value = urlParams.get('search');
+      currentFilters.search = urlParams.get('search');
+    }
+
+    // Price range
+    document.getElementById('price-range').addEventListener('input', function() {
+      document.getElementById('price-val').textContent = '₹' + Number(this.value).toLocaleString('en-IN');
+    });
+
+    function buildProductCard(p) {
+      const badgeMap = { 'New': 'badge-new', 'Best Seller': 'badge-best', 'Sale': 'badge-sale' };
+      const badgeHtml = p.badge ? '<span class="product-badge ' + (badgeMap[p.badge] || '') + '">' + p.badge + '</span>' : '';
+      const rating = Math.round(p.rating || 0);
+      const stars = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+      const oldPrice = p.oldPrice > p.price ? '<span class="product-old-price">₹' + Number(p.oldPrice).toLocaleString('en-IN') + '</span>' : '';
+      return '<div class="product-card" data-id="' + p._id + '" data-name="' + p.name.replace(/"/g, '&quot;') + '" data-price="' + p.price + '" data-emoji="' + (p.emoji || '🛋️') + '">' +
+        '<div class="product-img-wrap">' +
+          badgeHtml +
+          '<div class="product-emoji">' + (p.emoji || '🛋️') + '</div>' +
+          '<div class="product-actions-hover">' +
+            '<button class="action-icon-btn" onclick="viewProduct(\'' + p._id + '\')" title="Quick View"><i class="fas fa-eye"></i></button>' +
+            '<button class="action-icon-btn" title="Wishlist"><i class="fas fa-heart"></i></button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="product-body">' +
+          '<div class="product-meta">' + p.category + '</div>' +
+          '<a href="product_detail.html?id=' + p._id + '" class="product-name">' + p.name + '</a>' +
+          '<div class="product-stars">' + stars + ' <span>(' + (p.numReviews || 0) + ')</span></div>' +
+          '<div class="product-footer">' +
+            '<div><span class="product-price">₹' + Number(p.price).toLocaleString('en-IN') + '</span>' + oldPrice + '</div>' +
+            '<button class="add-cart-btn" onclick="handleAdd(this)"><i class="fas fa-cart-plus"></i> Add</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function handleAdd(btn) {
+      const card = btn.closest('[data-id]');
+      if (!card) return;
+      addToCart({
+        id:    card.dataset.id,
+        name:  card.dataset.name,
+        price: parseInt(card.dataset.price),
+        emoji: card.dataset.emoji || '🛋️'
+      });
+      btn.innerHTML = '<i class="fas fa-check"></i> Added!';
+      btn.style.cssText = 'background:#2E8B57;color:white;border-radius:50px;padding:0.5rem 1rem;border:none;cursor:pointer;font-family:Jost,sans-serif;font-size:0.82rem;font-weight:600;';
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-cart-plus"></i> Add';
+        btn.style.cssText = '';
+      }, 1500);
+    }
+
+    function viewProduct(id) {
+      window.location.href = 'product_detail.html?id=' + id;
+    }
+
+    async function loadProducts(page) {
+      page = page || 1;
+      currentPage = page;
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--text-muted);"><i class="fas fa-spinner fa-spin fa-2x"></i><p style="margin-top:1rem;">Loading…</p></div>';
+
+      const params = { page: page, limit: 9 };
+      if (currentFilters.category) params.category = currentFilters.category;
+      if (currentFilters.maxPrice) params.maxPrice = currentFilters.maxPrice;
+      if (currentFilters.sort)     params.sort     = currentFilters.sort;
+      if (currentFilters.search)   params.search   = currentFilters.search;
+
+      const data = await getProducts(params);
+
+      if (!data || !data.success) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;">' +
+          '<i class="fas fa-database" style="font-size:3rem;color:var(--cream-dark);"></i>' +
+          '<h3 style="margin-top:1rem;color:var(--wood-dark);">No products in database</h3>' +
+          '<p style="color:var(--text-muted);">Run <code style="background:#f5f5f5;padding:2px 8px;border-radius:4px;font-size:0.9rem;">node seeder.js</code> in your backend folder, then refresh this page.</p>' +
+          '</div>';
+        document.getElementById('product-count').textContent = 'Run seeder.js to add products';
+        document.getElementById('pagination').innerHTML = '';
+        return;
+      }
+
+      if (!data.products || data.products.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--text-muted);">' +
+          '<i class="fas fa-box-open fa-3x" style="color:var(--cream-dark);"></i>' +
+          '<p style="margin-top:1rem;">No products found. Try different filters.</p>' +
+          '</div>';
+        document.getElementById('product-count').textContent = 'No products found';
+        document.getElementById('pagination').innerHTML = '';
+        return;
+      }
+
+      document.getElementById('product-count').textContent = 'Showing ' + data.products.length + ' of ' + data.total + ' products';
+      grid.innerHTML = data.products.map(buildProductCard).join('');
+
+      // Pagination
+      const pagDiv = document.getElementById('pagination');
+      pagDiv.innerHTML = '';
+      if (data.pages > 1) {
+        const s = 'padding:0.6rem 1rem;border-radius:8px;cursor:pointer;font-family:"Jost",sans-serif;';
+        if (page > 1) pagDiv.innerHTML += '<button style="' + s + 'border:1.5px solid var(--cream-dark);background:white;" onclick="loadProducts(' + (page-1) + ')">← Prev</button>';
+        for (let i = 1; i <= data.pages; i++) {
+          const a = i === page ? 'border:2px solid var(--gold);background:var(--gold);color:var(--wood-dark);font-weight:700;' : 'border:1.5px solid var(--cream-dark);background:white;';
+          pagDiv.innerHTML += '<button style="' + s + a + '" onclick="loadProducts(' + i + ')">' + i + '</button>';
+        }
+        if (page < data.pages) pagDiv.innerHTML += '<button style="' + s + 'border:1.5px solid var(--cream-dark);background:white;" onclick="loadProducts(' + (page+1) + ')">Next →</button>';
+      }
+
+      _updateBadge();
+    }
+
+    function applyFilters() {
+      currentFilters = {};
+      const cats = [];
+      document.querySelectorAll('.cat-filter:checked').forEach(c => cats.push(c.value));
+      if (cats.length === 1) currentFilters.category = cats[0];
+      const maxP = document.getElementById('price-range').value;
+      if (parseInt(maxP) < 50000) currentFilters.maxPrice = maxP;
+      const sort = document.querySelector('input[name="sort"]:checked');
+      if (sort && sort.value) currentFilters.sort = sort.value;
+      const search = document.getElementById('searchInput').value.trim();
+      if (search) currentFilters.search = search;
+      loadProducts(1);
+    }
+
+    function resetFilters() {
+      document.querySelectorAll('.cat-filter').forEach(c => c.checked = false);
+      document.getElementById('price-range').value = 50000;
+      document.getElementById('price-val').textContent = '₹50,000';
+      document.querySelector('input[name="sort"]').checked = true;
+      document.getElementById('searchInput').value = '';
+      currentFilters = {};
+      loadProducts(1);
+    }
+
+    // Navbar user state
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = getCurrentUser();
+      if (user) {
+        const label = document.getElementById('userNameLabel');
+        if (label) label.textContent = '👋 Hi, ' + user.name.split(' ')[0];
+        const loginLink = document.getElementById('navLoginLink');
+        const logoutBtn = document.getElementById('navLogoutBtn');
+        if (loginLink) loginLink.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'flex';
+      }
+      const btn = document.getElementById('userMenuBtn');
+      const dropdown = document.getElementById('userDropdown');
+      if (btn && dropdown) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        });
+        document.addEventListener('click', function() { dropdown.style.display = 'none'; });
+      }
+    });
+
+    loadProducts(1);
+  </script>
+</body>
+</html>

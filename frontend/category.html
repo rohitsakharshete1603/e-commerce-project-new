@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories — Modern Furniture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar-wrapper" id="navbar">
+    <div class="navbar-inner">
+      <a class="nav-brand" href="index.html">
+        <div class="brand-icon"><i class="fas fa-couch"></i></div>
+        Modern Furniture
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="product.html">Products</a>
+        <a href="category.html" class="active">Categories</a>
+        <a href="cart.html">Cart</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="nav-search-btn"><i class="fas fa-search"></i></button>
+        <a href="cart.html" class="nav-cart"><i class="fas fa-shopping-cart"></i><span class="cart-badge">0</span></a>
+        <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-menu-panel">
+      <button class="mobile-close"><i class="fas fa-times"></i></button>
+      <a class="mobile-nav-link" href="index.html">Home</a>
+      <a class="mobile-nav-link" href="product.html">Products</a>
+      <a class="mobile-nav-link" href="category.html">Categories</a>
+      <a class="mobile-nav-link" href="cart.html">Cart</a>
+    </div>
+  </div>
+
+  <!-- BANNER -->
+  <div class="page-banner">
+    <div class="container">
+      <h1>All Categories</h1>
+      <div class="breadcrumb-nav">
+        <a href="index.html">Home</a><span>/</span> Categories
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES HERO GRID -->
+  <section class="section section-light">
+    <div class="container">
+      <div class="section-header">
+        <div class="tag">Find Your Style</div>
+        <h2>Browse by Room</h2>
+        <p>Explore our curated collections designed for every corner of your home.</p>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="category-hero-grid">
+        <a href="product.html?category=Living+Room" class="cat-hero-card">
+          <div class="cat-bg cat-bg-1"></div>
+          <div class="cat-em">🛋️</div>
+          <div class="cat-info"><h4>Living Room</h4><span>48 Products</span></div>
+        </a>
+        <a href="product.html?category=Bedroom" class="cat-hero-card">
+          <div class="cat-bg cat-bg-2"></div>
+          <div class="cat-em">🛏️</div>
+          <div class="cat-info"><h4>Bedroom</h4><span>62 Products</span></div>
+        </a>
+        <a href="product.html?category=Dining+Room" class="cat-hero-card">
+          <div class="cat-bg cat-bg-3"></div>
+          <div class="cat-em">🍽️</div>
+          <div class="cat-info"><h4>Dining Room</h4><span>34 Products</span></div>
+        </a>
+        <a href="product.html?category=Office" class="cat-hero-card">
+          <div class="cat-bg cat-bg-4"></div>
+          <div class="cat-em">🪑</div>
+          <div class="cat-info"><h4>Office</h4><span>29 Products</span></div>
+        </a>
+        <a href="product.html" class="cat-hero-card">
+          <div class="cat-bg" style="background:linear-gradient(160deg,#3D3D1C 0%,#70692E 100%);"></div>
+          <div class="cat-em">🧸</div>
+          <div class="cat-info"><h4>Kids Room</h4><span>21 Products</span></div>
+        </a>
+        <a href="product.html" class="cat-hero-card">
+          <div class="cat-bg" style="background:linear-gradient(160deg,#1C3D3A 0%,#2E706A 100%);"></div>
+          <div class="cat-em">🪴</div>
+          <div class="cat-info"><h4>Outdoor</h4><span>15 Products</span></div>
+        </a>
+      </div>
+
+      <!-- Detailed Category Sections -->
+      <div style="margin-top:4rem;">
+        <div class="section-header">
+          <div class="tag">Living Room</div>
+          <h2>Living Room Collection</h2>
+          <div class="section-divider"></div>
+        </div>
+        <div class="products-grid">
+          <div class="product-card" data-id="p1" data-name="Luxury Sofa Set" data-price="15999" data-emoji="🛋️">
+            <div class="product-img-wrap">
+              <span class="product-badge badge-new">New</span>
+              <div class="product-emoji">🛋️</div>
+              <div class="product-actions-hover">
+                <button class="action-icon-btn"><i class="fas fa-eye"></i></button>
+                <button class="action-icon-btn"><i class="fas fa-heart"></i></button>
+              </div>
+            </div>
+            <div class="product-body">
+              <div class="product-meta">Living Room</div>
+              <a href="product_detail.html?id=p1" class="product-name">Luxury Sofa Set</a>
+              <div class="product-stars">★★★★☆ <span>(128)</span></div>
+              <div class="product-footer">
+                <div><span class="product-price">₹15,999</span><span class="product-old-price">₹22,000</span></div>
+                <button class="add-cart-btn"><i class="fas fa-cart-plus"></i> Add</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-card" data-id="p7" data-name="Coffee Table" data-price="3499" data-emoji="☕">
+            <div class="product-img-wrap">
+              <span class="product-badge badge-new">New</span>
+              <div class="product-emoji">☕</div>
+              <div class="product-actions-hover">
+                <button class="action-icon-btn"><i class="fas fa-eye"></i></button>
+                <button class="action-icon-btn"><i class="fas fa-heart"></i></button>
+              </div>
+            </div>
+            <div class="product-body">
+              <div class="product-meta">Living Room</div>
+              <a href="product_detail.html?id=p7" class="product-name">Wooden Coffee Table</a>
+              <div class="product-stars">★★★★★ <span>(41)</span></div>
+              <div class="product-footer">
+                <div><span class="product-price">₹3,499</span><span class="product-old-price">₹5,000</span></div>
+                <button class="add-cart-btn"><i class="fas fa-cart-plus"></i> Add</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-card" data-id="p8" data-name="Bookshelf" data-price="4299" data-emoji="📚">
+            <div class="product-img-wrap">
+              <span class="product-badge badge-sale">Sale</span>
+              <div class="product-emoji">📚</div>
+              <div class="product-actions-hover">
+                <button class="action-icon-btn"><i class="fas fa-eye"></i></button>
+                <button class="action-icon-btn"><i class="fas fa-heart"></i></button>
+              </div>
+            </div>
+            <div class="product-body">
+              <div class="product-meta">Living / Office</div>
+              <a href="product_detail.html?id=p8" class="product-name">5-Shelf Bookshelf</a>
+              <div class="product-stars">★★★★☆ <span>(89)</span></div>
+              <div class="product-footer">
+                <div><span class="product-price">₹4,299</span><span class="product-old-price">₹6,200</span></div>
+                <button class="add-cart-btn"><i class="fas fa-cart-plus"></i> Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:4rem;">
+        <div class="section-header">
+          <div class="tag">Bedroom</div>
+          <h2>Bedroom Collection</h2>
+          <div class="section-divider"></div>
+        </div>
+        <div class="products-grid">
+          <div class="product-card" data-id="p2" data-name="King Size Bed" data-price="12999" data-emoji="🛏️">
+            <div class="product-img-wrap">
+              <span class="product-badge badge-best">Best Seller</span>
+              <div class="product-emoji">🛏️</div>
+              <div class="product-actions-hover">
+                <button class="action-icon-btn"><i class="fas fa-eye"></i></button>
+                <button class="action-icon-btn"><i class="fas fa-heart"></i></button>
+              </div>
+            </div>
+            <div class="product-body">
+              <div class="product-meta">Bedroom</div>
+              <a href="product_detail.html?id=p2" class="product-name">King Size Bed</a>
+              <div class="product-stars">★★★★★ <span>(95)</span></div>
+              <div class="product-footer">
+                <div><span class="product-price">₹12,999</span><span class="product-old-price">₹18,000</span></div>
+                <button class="add-cart-btn"><i class="fas fa-cart-plus"></i> Add</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-card" data-id="p4" data-name="Wardrobe 4-Door" data-price="18999" data-emoji="🚪">
+            <div class="product-img-wrap">
+              <span class="product-badge badge-new">New</span>
+              <div class="product-emoji">🚪</div>
+              <div class="product-actions-hover">
+                <button class="action-icon-btn"><i class="fas fa-eye"></i></button>
+                <button class="action-icon-btn"><i class="fas fa-heart"></i></button>
+              </div>
+            </div>
+            <div class="product-body">
+              <div class="product-meta">Bedroom</div>
+              <a href="product_detail.html?id=p4" class="product-name">Wardrobe 4-Door</a>
+              <div class="product-stars">★★★★★ <span>(212)</span></div>
+              <div class="product-footer">
+                <div><span class="product-price">₹18,999</span><span class="product-old-price">₹25,000</span></div>
+                <button class="add-cart-btn"><i class="fas fa-cart-plus"></i> Add</button>
+              </div>
+            </div>
+          </div>
+          <div class="product-card" data-id="p6" data-name="Dressing Table" data-price="5999" data-emoji="🪞">
+            <div class="product-img-wrap">
+              <span class="product-badge badge-best">Best Seller</span>
+              <div class="product-emoji">🪞</div>
+              <div class="product-actions-hover">
+                <button class="action-icon-btn"><i class="fas fa-eye"></i></button>
+                <button class="action-icon-btn"><i class="fas fa-heart"></i></button>
+              </div>
+            </div>
+            <div class="product-body">
+              <div class="product-meta">Bedroom</div>
+              <a href="product_detail.html?id=p6" class="product-name">Dressing Table with Mirror</a>
+              <div class="product-stars">★★★★☆ <span>(63)</span></div>
+              <div class="product-footer">
+                <div><span class="product-price">₹5,999</span><span class="product-old-price">₹8,500</span></div>
+                <button class="add-cart-btn"><i class="fas fa-cart-plus"></i> Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:3rem;">
+        <a href="product.html" class="btn-primary-gold">View All Products <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-name"><i class="fas fa-couch text-gold"></i> Modern Furniture</div>
+          <p>Quality furniture for your dream home. Serving Pune families since 2012.</p>
+        </div>
+        <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="product.html">Products</a></li></ul></div>
+        <div class="footer-col"><h5>Categories</h5><ul><li><a href="#">Living Room</a></li><li><a href="#">Bedroom</a></li></ul></div>
+        <div class="footer-col"><h5>Support</h5><ul><li><a href="#">FAQ</a></li><li><a href="#">Returns</a></li></ul></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;font-size:0.8rem;">
+        <span>© 2026 Modern Furniture. All Rights Reserved.</span>
+        <span>Made with ❤️ in Pune</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top"><i class="fas fa-chevron-up"></i></button>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script>
+    // Wire all add-to-cart buttons on this page
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.add-cart-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault();
+          const card = btn.closest('[data-id]');
+          if (card) addToCart({ id: card.dataset.id, name: card.dataset.name, price: parseInt(card.dataset.price), emoji: card.dataset.emoji || '🛋️' });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed — Modern Furniture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    @keyframes checkIn { 0%{transform:scale(0);opacity:0} 60%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
+    @keyframes fadeUp  { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .success-icon { animation: checkIn 0.6s cubic-bezier(0.175,0.885,0.32,1.275) forwards; }
+    .confirmation-center > * { animation: fadeUp 0.5s ease both; }
+    .confirmation-center > *:nth-child(2) { animation-delay: 0.15s; }
+    .confirmation-center > *:nth-child(3) { animation-delay: 0.3s; }
+    .confirmation-center > *:nth-child(4) { animation-delay: 0.45s; }
+    .confirmation-center > *:nth-child(5) { animation-delay: 0.6s; }
+    .confirmation-center > *:nth-child(6) { animation-delay: 0.75s; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <div class="navbar-wrapper" id="navbar">
+    <div class="navbar-inner">
+      <a class="nav-brand" href="index.html">
+        <div class="brand-icon"><i class="fas fa-couch"></i></div>
+        Modern Furniture
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="product.html">Products</a>
+        <a href="category.html">Categories</a>
+        <a href="cart.html">Cart</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="nav-search-btn" onclick="location.href='product.html'"><i class="fas fa-search"></i></button>
+        <a href="cart.html" class="nav-cart"><i class="fas fa-shopping-cart"></i><span class="cart-badge">0</span></a>
+        <button class="nav-toggle" id="navToggle"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-menu-panel">
+      <button class="mobile-close"><i class="fas fa-times"></i></button>
+      <a class="mobile-nav-link" href="index.html">Home</a>
+      <a class="mobile-nav-link" href="product.html">Products</a>
+    </div>
+  </div>
+
+  <!-- CONFIRMATION -->
+  <section class="section section-light" style="min-height:calc(100vh - 72px);margin-top:72px;display:flex;align-items:center;">
+    <div class="container">
+      <div class="confirmation-center" id="confirmationCenter">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-name"><i class="fas fa-couch text-gold"></i> Modern Furniture</div>
+          <p>Quality furniture for your dream home.</p>
+        </div>
+        <div class="footer-col"><h5>Quick Links</h5><ul><li><a href="index.html">Home</a></li><li><a href="product.html">Products</a></li></ul></div>
+        <div class="footer-col"><h5>Categories</h5><ul><li><a href="#">Living Room</a></li><li><a href="#">Bedroom</a></li></ul></div>
+        <div class="footer-col"><h5>Support</h5><ul><li><a href="#">FAQ</a></li><li><a href="#">Returns</a></li></ul></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;font-size:0.8rem;">
+        <span>© 2026 Modern Furniture. All Rights Reserved.</span>
+        <span>Made with ❤️ in Pune</span>
+      </div>
+    </div>
+  </footer>
+
+  <button class="scroll-top"><i class="fas fa-chevron-up"></i></button>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script>
+    function fmt(n) { return n != null ? '₹' + Number(n).toLocaleString('en-IN') : '—'; }
+    function fmtDate(d) {
+      if (!d) return '—';
+      return new Date(d).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+    }
+
+    const order = (function() {
+      try { return JSON.parse(localStorage.getItem('lb_last_order')); } catch { return null; }
+    })();
+
+    const center = document.getElementById('confirmationCenter');
+
+    if (!order) {
+      center.innerHTML = `
+        <div style="text-align:center;padding:3rem;">
+          <i class="fas fa-box-open" style="font-size:4rem;color:var(--cream-dark);"></i>
+          <h2 style="margin-top:1rem;color:var(--wood-dark);">No recent order found</h2>
+          <p style="color:var(--text-muted);margin:0.5rem 0 1.5rem;">It looks like you haven't placed an order yet, or the session expired.</p>
+          <a href="product.html" class="btn-primary-gold"><i class="fas fa-couch"></i> Browse Products</a>
+        </div>`;
+    } else {
+      const orderId   = order.orderId  || order._id || 'LB-' + Date.now().toString().slice(-6);
+      const subtotal  = order.subtotal  || order.totalAmount || 0;
+      const delivery  = order.deliveryCharge != null ? order.deliveryCharge : 299;
+      const total     = order.totalAmount || (subtotal + delivery);
+      const payment   = order.paymentMethod || 'COD';
+      const estDel    = fmtDate(order.estimatedDelivery);
+      const addr      = order.deliveryAddress;
+
+      const itemsHtml = (order.items || []).map(i => `
+        <div style="display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid var(--cream-dark);">
+          <div style="font-size:1.5rem;">${i.emoji || '🛋️'}</div>
+          <div style="flex:1;font-size:0.86rem;color:var(--wood-dark);font-weight:500;">${i.name}</div>
+          <div style="font-size:0.82rem;color:var(--text-muted);">× ${i.quantity || 1}</div>
+          <div style="font-size:0.88rem;font-weight:600;">${fmt(i.price * (i.quantity || 1))}</div>
+        </div>`).join('');
+
+      center.innerHTML = `
+        <div class="success-icon"><i class="fas fa-check" style="color:white;"></i></div>
+
+        <div>
+          <h1 style="font-size:2rem;color:var(--wood-dark);margin-bottom:0.5rem;">Order Confirmed! 🎉</h1>
+          <p style="color:var(--text-muted);">
+            Thank you for shopping with Modern Furniture. Your order has been placed and will be delivered to your doorstep.
+          </p>
+        </div>
+
+        <div>
+          <div class="order-id-badge">Order #${orderId}</div>
+          <p style="font-size:0.82rem;color:var(--text-muted);">A confirmation will be sent to your phone & email.</p>
+        </div>
+
+        <div class="order-steps">
+          <div class="order-step"><div class="step-dot done"><i class="fas fa-check"></i></div><span>Order Placed</span></div>
+          <div class="order-step"><div class="step-dot active"><i class="fas fa-box"></i></div><span>Processing</span></div>
+          <div class="order-step"><div class="step-dot"><i class="fas fa-truck"></i></div><span>Shipped</span></div>
+          <div class="order-step"><div class="step-dot"><i class="fas fa-home"></i></div><span>Delivered</span></div>
+        </div>
+
+        <div style="background:var(--white);border-radius:var(--radius-lg);padding:2rem;box-shadow:var(--shadow-sm);width:100%;text-align:left;">
+          <h3 style="font-size:1rem;color:var(--wood-dark);margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--cream-dark);">
+            Order Details
+          </h3>
+          ${itemsHtml}
+          <div style="margin-top:1rem;">
+            <div class="summary-row"><span>Subtotal</span><span>${fmt(subtotal)}</span></div>
+            <div class="summary-row"><span>Delivery</span><span style="color:${delivery===0?'#2E8B57':'inherit'}">${delivery===0?'FREE':fmt(delivery)}</span></div>
+            <div class="summary-row total"><span>Amount Paid</span><span>${fmt(total)}</span></div>
+            <div class="summary-row" style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--cream-dark);">
+              <span>Payment</span><span>${payment}</span>
+            </div>
+            <div class="summary-row">
+              <span>Estimated Delivery</span>
+              <span style="color:var(--wood-mid);font-weight:600;">${estDel}</span>
+            </div>
+            ${addr ? `<div class="summary-row">
+              <span>Deliver to</span>
+              <span style="text-align:right;max-width:200px;font-size:0.82rem;">${addr.name}, ${addr.city}, ${addr.state} – ${addr.pincode}</span>
+            </div>` : ''}
+          </div>
+        </div>
+
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+          <a href="index.html" class="btn-primary-gold"><i class="fas fa-home"></i> Back to Home</a>
+          <a href="product.html" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.9rem 2rem;border:2px solid var(--wood-dark);border-radius:50px;color:var(--wood-dark);font-weight:600;font-size:0.9rem;transition:var(--transition);">
+            <i class="fas fa-shopping-bag"></i> Continue Shopping
+          </a>
+        </div>`;
+
+      // Clear the saved order after rendering (prevent stale data on refresh)
+      // But keep it for a few seconds in case user refreshes immediately
+      setTimeout(() => localStorage.removeItem('lb_last_order'), 10000);
+    }
+  </script>
+</body>
+</html>

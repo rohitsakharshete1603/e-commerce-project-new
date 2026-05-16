@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — Modern Furniture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --wood-dark:  #3D2314;
+      --wood-mid:   #7B4F2E;
+      --wood-light: #C68642;
+      --gold:       #D4A853;
+      --cream:      #FDF6EE;
+      --cream-dark: #F0E0C8;
+      --sidebar-w:  240px;
+      --danger:     #e74c3c;
+      --success:    #27ae60;
+      --info:       #2980b9;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Jost', sans-serif; background: #f4ede4; color: #2c1a0e; display: flex; min-height: 100vh; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: var(--sidebar-w); background: var(--wood-dark); color: white;
+      display: flex; flex-direction: column; position: fixed; top: 0; left: 0;
+      height: 100vh; z-index: 100; transition: transform 0.3s;
+    }
+    .sidebar-brand {
+      padding: 1.5rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .sidebar-brand .logo { font-size: 1.5rem; }
+    .sidebar-brand h1 { font-family: 'Playfair Display', serif; font-size: 1rem; line-height: 1.3; color: var(--gold); }
+    .sidebar-brand small { font-size: 0.7rem; color: rgba(255,255,255,0.5); }
+    .sidebar-nav { flex: 1; padding: 1rem 0; overflow-y: auto; }
+    .nav-section-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.35); padding: 0.75rem 1.25rem 0.35rem; }
+    .nav-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.75rem 1.25rem; cursor: pointer; color: rgba(255,255,255,0.7);
+      font-size: 0.88rem; font-weight: 500; border-left: 3px solid transparent;
+      transition: all 0.2s;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.07); color: white; }
+    .nav-item.active { background: rgba(212,168,83,0.15); color: var(--gold); border-left-color: var(--gold); }
+    .nav-item i { width: 18px; text-align: center; font-size: 0.9rem; }
+    .nav-badge { margin-left: auto; background: var(--danger); color: white; font-size: 0.65rem; font-weight: 700; padding: 2px 7px; border-radius: 50px; }
+    .sidebar-footer { padding: 1rem 1.25rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    .sidebar-user { display: flex; align-items: center; gap: 0.6rem; }
+    .sidebar-user .avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--gold); color: var(--wood-dark); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+    .sidebar-user .info { font-size: 0.78rem; }
+    .sidebar-user .info strong { display: block; color: white; font-size: 0.82rem; }
+    .sidebar-user .info span { color: rgba(255,255,255,0.4); font-size: 0.7rem; }
+    .btn-logout { margin-top: 0.75rem; width: 100%; padding: 0.55rem; background: rgba(231,76,60,0.15); color: #e74c3c; border: 1px solid rgba(231,76,60,0.3); border-radius: 8px; cursor: pointer; font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; }
+    .btn-logout:hover { background: rgba(231,76,60,0.25); }
+
+    /* MAIN */
+    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+    .topbar { background: white; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--cream-dark); position: sticky; top: 0; z-index: 50; }
+    .topbar h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--wood-dark); }
+    .topbar-right { display: flex; align-items: center; gap: 1rem; }
+    .topbar-right .site-link { font-size: 0.82rem; color: var(--wood-mid); display: flex; align-items: center; gap: 0.4rem; text-decoration: none; padding: 0.4rem 0.9rem; border: 1.5px solid var(--cream-dark); border-radius: 50px; transition: all 0.2s; }
+    .topbar-right .site-link:hover { border-color: var(--gold); color: var(--gold); }
+    .content { padding: 2rem; flex: 1; }
+
+    /* PANELS */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* STATS CARDS */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
+    .stat-card { background: white; border-radius: 14px; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 2px 12px rgba(61,35,20,0.07); border: 1px solid var(--cream-dark); }
+    .stat-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .stat-icon.gold    { background: rgba(212,168,83,0.15); color: var(--gold); }
+    .stat-icon.green   { background: rgba(39,174,96,0.12); color: var(--success); }
+    .stat-icon.blue    { background: rgba(41,128,185,0.12); color: var(--info); }
+    .stat-icon.red     { background: rgba(231,76,60,0.12); color: var(--danger); }
+    .stat-info .val { font-size: 1.6rem; font-weight: 700; color: var(--wood-dark); line-height: 1; }
+    .stat-info .lbl { font-size: 0.78rem; color: #888; margin-top: 0.3rem; }
+
+    /* CARD */
+    .card { background: white; border-radius: 14px; box-shadow: 0 2px 12px rgba(61,35,20,0.07); border: 1px solid var(--cream-dark); overflow: hidden; margin-bottom: 1.5rem; }
+    .card-header { padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--cream-dark); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .card-header h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--wood-dark); }
+    .card-body { padding: 0; overflow-x: auto; }
+
+    /* TABLE */
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th { background: var(--cream); padding: 0.9rem 1.2rem; text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #888; font-weight: 600; border-bottom: 1px solid var(--cream-dark); white-space: nowrap; }
+    td { padding: 1rem 1.2rem; border-bottom: 1px solid #faf5ef; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fdfaf6; }
+    .emoji-cell { font-size: 1.5rem; }
+
+    /* BADGES */
+    .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 50px; font-size: 0.72rem; font-weight: 600; }
+    .badge-new      { background: #e8f5e9; color: #2e7d32; }
+    .badge-best     { background: #fff8e1; color: #f57f17; }
+    .badge-sale     { background: #fce4ec; color: #c62828; }
+    .badge-admin    { background: rgba(212,168,83,0.15); color: var(--wood-mid); }
+    .badge-user     { background: #f5f5f5; color: #666; }
+    .badge-processing { background: #e3f2fd; color: #1565c0; }
+    .badge-confirmed  { background: #e8f5e9; color: #2e7d32; }
+    .badge-shipped    { background: #fff8e1; color: #f57f17; }
+    .badge-delivered  { background: #e8f5e9; color: #1b5e20; }
+    .badge-cancelled  { background: #fce4ec; color: #c62828; }
+
+    /* BUTTONS */
+    .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1rem; border-radius: 8px; font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-primary { background: var(--wood-dark); color: var(--gold); }
+    .btn-primary:hover { background: var(--wood-mid); }
+    .btn-gold { background: var(--gold); color: var(--wood-dark); }
+    .btn-gold:hover { background: #c49840; }
+    .btn-danger { background: #fce4ec; color: var(--danger); border: 1px solid #f5c6cb; }
+    .btn-danger:hover { background: var(--danger); color: white; }
+    .btn-edit { background: #e3f2fd; color: var(--info); border: 1px solid #bbdefb; }
+    .btn-edit:hover { background: var(--info); color: white; }
+    .btn-sm { padding: 0.35rem 0.75rem; font-size: 0.78rem; }
+    .btn-actions { display: flex; gap: 0.4rem; }
+
+    /* FORM */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1.5rem; }
+    .form-grid.col-1 { grid-template-columns: 1fr; }
+    .form-full { grid-column: 1 / -1; }
+    .form-group label { display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #888; margin-bottom: 0.4rem; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 0.65rem 0.9rem; border: 1.5px solid var(--cream-dark);
+      border-radius: 8px; font-family: 'Jost', sans-serif; font-size: 0.88rem;
+      color: var(--wood-dark); background: var(--cream); outline: none; transition: all 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--gold); background: white; box-shadow: 0 0 0 3px rgba(212,168,83,0.12);
+    }
+    .form-actions { display: flex; gap: 0.75rem; padding: 1rem 1.5rem; border-top: 1px solid var(--cream-dark); justify-content: flex-end; }
+
+    /* MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: white; border-radius: 18px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(0,0,0,0.3); }
+    .modal-header { padding: 1.5rem; border-bottom: 1px solid var(--cream-dark); display: flex; align-items: center; justify-content: space-between; }
+    .modal-header h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--wood-dark); }
+    .modal-close { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--cream); cursor: pointer; font-size: 1rem; color: #888; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .modal-close:hover { background: #f0e0c8; color: var(--wood-dark); }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; background: var(--wood-dark); color: var(--gold); padding: 0.85rem 1.5rem; border-radius: 50px; font-size: 0.88rem; font-weight: 600; display: flex; align-items: center; gap: 0.6rem; transform: translateY(120px); opacity: 0; transition: all 0.35s cubic-bezier(0.175,0.885,0.32,1.275); pointer-events: none; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.error { background: var(--danger); color: white; }
+
+    /* SEARCH */
+    .search-input { padding: 0.55rem 1rem 0.55rem 2.2rem; border: 1.5px solid var(--cream-dark); border-radius: 50px; font-family: 'Jost', sans-serif; font-size: 0.85rem; outline: none; background: var(--cream) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 0.7rem center; transition: all 0.2s; min-width: 220px; }
+    .search-input:focus { border-color: var(--gold); background-color: white; }
+
+    /* LOADING */
+    .spinner { width: 20px; height: 20px; border: 2px solid rgba(212,168,83,0.3); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-row td { text-align: center; padding: 3rem; color: #aaa; }
+
+    /* STATUS SELECT */
+    .status-select { padding: 0.3rem 0.6rem; border: 1.5px solid var(--cream-dark); border-radius: 6px; font-family: 'Jost', sans-serif; font-size: 0.78rem; outline: none; cursor: pointer; background: white; }
+
+    /* RECENT ORDERS */
+    .recent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+    /* EMPTY STATE */
+    .empty-state { text-align: center; padding: 4rem 2rem; color: #bbb; }
+    .empty-state i { font-size: 3rem; margin-bottom: 1rem; display: block; }
+    .empty-state p { font-size: 0.9rem; }
+
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .recent-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="logo">🛋️</div>
+    <div>
+      <h1>Modern Furniture</h1>
+      <small>Admin Panel</small>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-item active" onclick="showPanel('dashboard')">
+      <i class="fas fa-chart-pie"></i> Dashboard
+    </div>
+
+    <div class="nav-section-label">Manage</div>
+    <div class="nav-item" onclick="showPanel('products')">
+      <i class="fas fa-couch"></i> Products
+    </div>
+    <div class="nav-item" onclick="showPanel('orders')">
+      <i class="fas fa-shopping-bag"></i> Orders
+      <span class="nav-badge" id="pendingBadge" style="display:none">0</span>
+    </div>
+    <div class="nav-item" onclick="showPanel('users')">
+      <i class="fas fa-users"></i> Users
+    </div>
+
+    <div class="nav-section-label">Site</div>
+    <div class="nav-item" onclick="location.href='index.html'">
+      <i class="fas fa-home"></i> View Website
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="avatar" id="sidebarAvatar">A</div>
+      <div class="info">
+        <strong id="sidebarName">Admin</strong>
+        <span id="sidebarEmail">admin@furniture.com</span>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="adminLogout()">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <h2 id="topbarTitle">Dashboard</h2>
+    <div class="topbar-right">
+      <a href="http://localhost:5000" target="_blank" class="site-link">
+        <i class="fas fa-external-link-alt"></i> View Site
+      </a>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon gold"><i class="fas fa-couch"></i></div>
+          <div class="stat-info"><div class="val" id="stat-products">—</div><div class="lbl">Total Products</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fas fa-shopping-bag"></i></div>
+          <div class="stat-info"><div class="val" id="stat-orders">—</div><div class="lbl">Total Orders</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+          <div class="stat-info"><div class="val" id="stat-users">—</div><div class="lbl">Registered Users</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon red"><i class="fas fa-rupee-sign"></i></div>
+          <div class="stat-info"><div class="val" id="stat-revenue">—</div><div class="lbl">Total Revenue</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="fas fa-clock" style="color:var(--gold);margin-right:0.5rem;"></i>Recent Orders</h3>
+          <button class="btn btn-primary btn-sm" onclick="showPanel('orders')">View All</button>
+        </div>
+        <div class="card-body">
+          <table>
+            <thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="recentOrdersBody">
+              <tr class="loading-row"><td colspan="5"><div class="spinner" style="margin:auto;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PRODUCTS ═══ -->
+    <div class="panel" id="panel-products">
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="fas fa-couch" style="color:var(--gold);margin-right:0.5rem;"></i>All Products</h3>
+          <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+            <input type="text" class="search-input" id="productSearch" placeholder="Search products…" oninput="filterProducts()">
+            <button class="btn btn-gold" onclick="openProductModal()">
+              <i class="fas fa-plus"></i> Add Product
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <table>
+            <thead><tr><th></th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Badge</th><th>Actions</th></tr></thead>
+            <tbody id="productsBody">
+              <tr class="loading-row"><td colspan="7"><div class="spinner" style="margin:auto;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ORDERS ═══ -->
+    <div class="panel" id="panel-orders">
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="fas fa-shopping-bag" style="color:var(--gold);margin-right:0.5rem;"></i>All Orders</h3>
+          <input type="text" class="search-input" id="orderSearch" placeholder="Search orders…" oninput="filterOrders()">
+        </div>
+        <div class="card-body">
+          <table>
+            <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Amount</th><th>Payment</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="ordersBody">
+              <tr class="loading-row"><td colspan="7"><div class="spinner" style="margin:auto;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ USERS ═══ -->
+    <div class="panel" id="panel-users">
+      <div class="card">
+        <div class="card-header">
+          <h3><i class="fas fa-users" style="color:var(--gold);margin-right:0.5rem;"></i>All Users</h3>
+          <input type="text" class="search-input" id="userSearch" placeholder="Search users…" oninput="filterUsers()">
+        </div>
+        <div class="card-body">
+          <table>
+            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead>
+            <tbody id="usersBody">
+              <tr class="loading-row"><td colspan="6"><div class="spinner" style="margin:auto;"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Add New Product</h3>
+      <button class="modal-close" onclick="closeProductModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group form-full">
+        <label>Product Name *</label>
+        <input type="text" id="pName" placeholder="e.g. Luxury Sofa Set">
+      </div>
+      <div class="form-group">
+        <label>Category *</label>
+        <select id="pCategory">
+          <option value="">Select category</option>
+          <option>Living Room</option>
+          <option>Bedroom</option>
+          <option>Dining Room</option>
+          <option>Office</option>
+          <option>Kids Room</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Emoji Icon</label>
+        <input type="text" id="pEmoji" placeholder="🛋️">
+      </div>
+      <div class="form-group">
+        <label>Price (₹) *</label>
+        <input type="number" id="pPrice" placeholder="15999" min="0">
+      </div>
+      <div class="form-group">
+        <label>Old Price (₹)</label>
+        <input type="number" id="pOldPrice" placeholder="22000" min="0">
+      </div>
+      <div class="form-group">
+        <label>Stock *</label>
+        <input type="number" id="pStock" placeholder="10" min="0">
+      </div>
+      <div class="form-group">
+        <label>Badge</label>
+        <select id="pBadge">
+          <option value="">None</option>
+          <option>New</option>
+          <option>Best Seller</option>
+          <option>Sale</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Rating (0–5)</label>
+        <input type="number" id="pRating" placeholder="4" min="0" max="5" step="0.5">
+      </div>
+      <div class="form-group">
+        <label>Material</label>
+        <input type="text" id="pMaterial" placeholder="Solid Sheesham Wood">
+      </div>
+      <div class="form-group">
+        <label>Dimensions</label>
+        <input type="text" id="pDimensions" placeholder="200 x 90 x 85 cm">
+      </div>
+      <div class="form-group">
+        <label>Warranty</label>
+        <input type="text" id="pWarranty" placeholder="1 Year">
+      </div>
+      <div class="form-group">
+        <label>Num Reviews</label>
+        <input type="number" id="pNumReviews" placeholder="0" min="0">
+      </div>
+      <div class="form-group form-full">
+        <label>Description</label>
+        <textarea id="pDescription" rows="3" placeholder="Describe the product…"></textarea>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="closeProductModal()" style="background:#f0e0c8;color:var(--wood-dark);">Cancel</button>
+      <button class="btn btn-gold" id="saveProductBtn" onclick="saveProduct()">
+        <i class="fas fa-save"></i> Save Product
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/api.js"></script>
+<script>
+  const ADMIN_API = 'http://localhost:5000/api/admin';
+  let allProducts = [], allOrders = [], allUsers = [];
+  let editingProductId = null;
+
+  // ── GUARD: must be logged in as admin ──────────────────────
+  (function() {
+    const token = getToken();
+    const user  = getCurrentUser();
+    if (!token || !user) { window.location.href = 'login.html'; return; }
+    if (!user.isAdmin) {
+      alert('⛔ Admin access required. Please login as an admin user.');
+      window.location.href = 'index.html';
+      return;
+    }
+    document.getElementById('sidebarName').textContent  = user.name;
+    document.getElementById('sidebarEmail').textContent = user.email;
+    document.getElementById('sidebarAvatar').textContent = user.name.charAt(0).toUpperCase();
+  })();
+
+  // ── ADMIN API HELPER ────────────────────────────────────────
+  async function adminReq(method, path, body) {
+    const headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() };
+    const res = await fetch(ADMIN_API + path, { method, headers, body: body ? JSON.stringify(body) : undefined });
+    return res.json();
+  }
+
+  // ── TOAST ───────────────────────────────────────────────────
+  function toast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = (type === 'error' ? '❌ ' : '✅ ') + msg;
+    t.className = 'toast show' + (type === 'error' ? ' error' : '');
+    clearTimeout(t._t);
+    t._t = setTimeout(() => t.className = 'toast', 3000);
+  }
+
+  // ── PANELS ──────────────────────────────────────────────────
+  const panelTitles = { dashboard: 'Dashboard', products: 'Products', orders: 'Orders', users: 'Users' };
+  function showPanel(name) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => {
+      if (n.textContent.trim().toLowerCase().includes(name)) n.classList.add('active');
+    });
+    document.getElementById('topbarTitle').textContent = panelTitles[name] || name;
+    if (name === 'products') loadProducts();
+    if (name === 'orders')   loadOrders();
+    if (name === 'users')    loadUsers();
+  }
+
+  // ── DASHBOARD ───────────────────────────────────────────────
+  async function loadDashboard() {
+    const data = await adminReq('GET', '/stats');
+    if (!data.success) return;
+    const s = data.stats;
+    document.getElementById('stat-products').textContent = s.totalProducts;
+    document.getElementById('stat-orders').textContent   = s.totalOrders;
+    document.getElementById('stat-users').textContent    = s.totalUsers;
+    document.getElementById('stat-revenue').textContent  = '₹' + Number(s.totalRevenue).toLocaleString('en-IN');
+
+    const tbody = document.getElementById('recentOrdersBody');
+    if (!data.recentOrders.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:2rem;color:#bbb;">No orders yet</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.recentOrders.map(o => `
+      <tr>
+        <td style="font-family:monospace;font-size:0.78rem;color:#888;">#${o._id.toString().slice(-6).toUpperCase()}</td>
+        <td>${o.user ? o.user.name : 'Guest'}</td>
+        <td style="font-weight:600;">₹${Number(o.totalAmount).toLocaleString('en-IN')}</td>
+        <td><span class="badge badge-${(o.status||'processing').toLowerCase()}">${o.status || 'Processing'}</span></td>
+        <td style="color:#888;font-size:0.8rem;">${new Date(o.createdAt).toLocaleDateString('en-IN')}</td>
+      </tr>`).join('');
+  }
+
+  // ── PRODUCTS ────────────────────────────────────────────────
+  async function loadProducts() {
+    const data = await adminReq('GET', '/products');
+    if (!data.success) { toast('Failed to load products', 'error'); return; }
+    allProducts = data.products;
+    renderProducts(allProducts);
+  }
+
+  function renderProducts(products) {
+    const tbody = document.getElementById('productsBody');
+    if (!products.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><i class="fas fa-box-open"></i><p>No products yet</p></td></tr>';
+      return;
+    }
+    const badgeMap = { 'New': 'badge-new', 'Best Seller': 'badge-best', 'Sale': 'badge-sale' };
+    tbody.innerHTML = products.map(p => `
+      <tr>
+        <td class="emoji-cell">${p.emoji || '🛋️'}</td>
+        <td style="font-weight:600;max-width:200px;">${p.name}</td>
+        <td><span style="font-size:0.8rem;color:#888;">${p.category}</span></td>
+        <td style="font-weight:600;">₹${Number(p.price).toLocaleString('en-IN')}</td>
+        <td>
+          <span style="color:${p.stock < 5 ? 'var(--danger)' : 'var(--success)'}; font-weight:600;">
+            ${p.stock} ${p.stock < 5 ? '⚠️' : ''}
+          </span>
+        </td>
+        <td>${p.badge ? '<span class="badge ' + (badgeMap[p.badge] || '') + '">' + p.badge + '</span>' : '<span style="color:#ccc;">—</span>'}</td>
+        <td>
+          <div class="btn-actions">
+            <button class="btn btn-edit btn-sm" onclick="editProduct('${p._id}')"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p._id}', '${p.name.replace(/'/g, "\\'")}')"><i class="fas fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+
+  function filterProducts() {
+    const q = document.getElementById('productSearch').value.toLowerCase();
+    renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)));
+  }
+
+  function openProductModal(product) {
+    editingProductId = null;
+    document.getElementById('modalTitle').textContent = 'Add New Product';
+    document.getElementById('saveProductBtn').innerHTML = '<i class="fas fa-plus"></i> Add Product';
+    ['pName','pCategory','pEmoji','pPrice','pOldPrice','pStock','pBadge','pRating','pMaterial','pDimensions','pWarranty','pNumReviews','pDescription']
+      .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+    document.getElementById('pWarranty').value = '1 Year';
+    document.getElementById('pRating').value = '4';
+    document.getElementById('productModal').classList.add('open');
+  }
+
+  function editProduct(id) {
+    const p = allProducts.find(x => x._id === id);
+    if (!p) return;
+    editingProductId = id;
+    document.getElementById('modalTitle').textContent = 'Edit Product';
+    document.getElementById('saveProductBtn').innerHTML = '<i class="fas fa-save"></i> Save Changes';
+    document.getElementById('pName').value        = p.name || '';
+    document.getElementById('pCategory').value    = p.category || '';
+    document.getElementById('pEmoji').value       = p.emoji || '';
+    document.getElementById('pPrice').value       = p.price || '';
+    document.getElementById('pOldPrice').value    = p.oldPrice || '';
+    document.getElementById('pStock').value       = p.stock || '';
+    document.getElementById('pBadge').value       = p.badge || '';
+    document.getElementById('pRating').value      = p.rating || 4;
+    document.getElementById('pMaterial').value    = p.material || '';
+    document.getElementById('pDimensions').value  = p.dimensions || '';
+    document.getElementById('pWarranty').value    = p.warranty || '1 Year';
+    document.getElementById('pNumReviews').value  = p.numReviews || 0;
+    document.getElementById('pDescription').value = p.description || '';
+    document.getElementById('productModal').classList.add('open');
+  }
+
+  function closeProductModal() {
+    document.getElementById('productModal').classList.remove('open');
+    editingProductId = null;
+  }
+
+  async function saveProduct() {
+    const name = document.getElementById('pName').value.trim();
+    const category = document.getElementById('pCategory').value;
+    const price = document.getElementById('pPrice').value;
+    if (!name || !category || !price) { toast('Name, category and price are required', 'error'); return; }
+
+    const btn = document.getElementById('saveProductBtn');
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Saving…';
+
+    const body = {
+      name, category,
+      emoji:       document.getElementById('pEmoji').value.trim() || '🛋️',
+      price:       Number(price),
+      oldPrice:    Number(document.getElementById('pOldPrice').value) || 0,
+      stock:       Number(document.getElementById('pStock').value) || 0,
+      badge:       document.getElementById('pBadge').value,
+      rating:      Number(document.getElementById('pRating').value) || 4,
+      material:    document.getElementById('pMaterial').value.trim(),
+      dimensions:  document.getElementById('pDimensions').value.trim(),
+      warranty:    document.getElementById('pWarranty').value.trim() || '1 Year',
+      numReviews:  Number(document.getElementById('pNumReviews').value) || 0,
+      description: document.getElementById('pDescription').value.trim(),
+    };
+
+    const data = editingProductId
+      ? await adminReq('PUT',  '/products/' + editingProductId, body)
+      : await adminReq('POST', '/products', body);
+
+    btn.disabled = false;
+    btn.innerHTML = editingProductId ? '<i class="fas fa-save"></i> Save Changes' : '<i class="fas fa-plus"></i> Add Product';
+
+    if (data.success) {
+      toast(editingProductId ? 'Product updated!' : 'Product added!');
+      closeProductModal();
+      loadProducts();
+    } else {
+      toast(data.message || 'Failed to save product', 'error');
+    }
+  }
+
+  async function deleteProduct(id, name) {
+    if (!confirm('Delete "' + name + '"? This cannot be undone.')) return;
+    const data = await adminReq('DELETE', '/products/' + id);
+    if (data.success) { toast('Product deleted'); loadProducts(); }
+    else toast(data.message || 'Delete failed', 'error');
+  }
+
+  // ── ORDERS ──────────────────────────────────────────────────
+  async function loadOrders() {
+    const data = await adminReq('GET', '/orders');
+    if (!data.success) { toast('Failed to load orders', 'error'); return; }
+    allOrders = data.orders;
+
+    const pending = allOrders.filter(o => o.status === 'Processing').length;
+    const badge = document.getElementById('pendingBadge');
+    badge.textContent = pending;
+    badge.style.display = pending > 0 ? 'inline' : 'none';
+
+    renderOrders(allOrders);
+  }
+
+  function renderOrders(orders) {
+    const tbody = document.getElementById('ordersBody');
+    if (!orders.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="empty-state"><i class="fas fa-shopping-bag"></i><p>No orders yet</p></td></tr>';
+      return;
+    }
+    const statuses = ['Processing','Confirmed','Shipped','Delivered','Cancelled'];
+    tbody.innerHTML = orders.map(o => `
+      <tr>
+        <td style="font-family:monospace;font-size:0.78rem;color:#888;">#${o._id.toString().slice(-6).toUpperCase()}</td>
+        <td>
+          <div style="font-weight:600;font-size:0.85rem;">${o.user ? o.user.name : 'Guest'}</div>
+          <div style="font-size:0.75rem;color:#aaa;">${o.user ? o.user.email : ''}</div>
+        </td>
+        <td style="color:#888;font-size:0.82rem;">${(o.items || []).length} item(s)</td>
+        <td style="font-weight:700;">₹${Number(o.totalAmount).toLocaleString('en-IN')}</td>
+        <td style="font-size:0.8rem;">${o.paymentMethod || 'COD'}</td>
+        <td>
+          <select class="status-select" onchange="updateOrderStatus('${o._id}', this.value)">
+            ${statuses.map(s => '<option value="' + s + '"' + (o.status === s ? ' selected' : '') + '>' + s + '</option>').join('')}
+          </select>
+        </td>
+        <td style="color:#888;font-size:0.8rem;">${new Date(o.createdAt).toLocaleDateString('en-IN')}</td>
+      </tr>`).join('');
+  }
+
+  function filterOrders() {
+    const q = document.getElementById('orderSearch').value.toLowerCase();
+    renderOrders(allOrders.filter(o =>
+      (o.user && o.user.name.toLowerCase().includes(q)) ||
+      o._id.toLowerCase().includes(q) ||
+      (o.status || '').toLowerCase().includes(q)
+    ));
+  }
+
+  async function updateOrderStatus(id, status) {
+    const data = await adminReq('PUT', '/orders/' + id + '/status', { status });
+    if (data.success) toast('Order status updated to ' + status);
+    else toast(data.message || 'Update failed', 'error');
+  }
+
+  // ── USERS ───────────────────────────────────────────────────
+  async function loadUsers() {
+    const data = await adminReq('GET', '/users');
+    if (!data.success) { toast('Failed to load users', 'error'); return; }
+    allUsers = data.users;
+    renderUsers(allUsers);
+  }
+
+  function renderUsers(users) {
+    const tbody = document.getElementById('usersBody');
+    if (!users.length) {
+      tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><i class="fas fa-users"></i><p>No users yet</p></td></tr>';
+      return;
+    }
+    tbody.innerHTML = users.map(u => `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:0.6rem;">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;color:var(--wood-mid);">
+              ${u.name.charAt(0).toUpperCase()}
+            </div>
+            <span style="font-weight:600;">${u.name}</span>
+          </div>
+        </td>
+        <td style="color:#888;font-size:0.85rem;">${u.email}</td>
+        <td style="color:#888;font-size:0.85rem;">${u.phone || '—'}</td>
+        <td><span class="badge ${u.isAdmin ? 'badge-admin' : 'badge-user'}">${u.isAdmin ? '⭐ Admin' : 'User'}</span></td>
+        <td style="color:#888;font-size:0.8rem;">${new Date(u.createdAt).toLocaleDateString('en-IN')}</td>
+        <td>
+          <button class="btn btn-sm ${u.isAdmin ? 'btn-danger' : 'btn-edit'}" onclick="toggleAdmin('${u._id}', '${u.name.replace(/'/g,"\\'")}', ${u.isAdmin})">
+            <i class="fas fa-${u.isAdmin ? 'user-minus' : 'user-shield'}"></i>
+            ${u.isAdmin ? 'Remove Admin' : 'Make Admin'}
+          </button>
+        </td>
+      </tr>`).join('');
+  }
+
+  function filterUsers() {
+    const q = document.getElementById('userSearch').value.toLowerCase();
+    renderUsers(allUsers.filter(u => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)));
+  }
+
+  async function toggleAdmin(id, name, isAdmin) {
+    const action = isAdmin ? 'remove admin from' : 'make admin';
+    if (!confirm('Are you sure you want to ' + action + ' "' + name + '"?')) return;
+    const data = await adminReq('PUT', '/users/' + id + '/toggle-admin');
+    if (data.success) { toast('User role updated!'); loadUsers(); }
+    else toast(data.message || 'Update failed', 'error');
+  }
+
+  function adminLogout() {
+    if (typeof clearAuth === 'function') clearAuth();
+    else { localStorage.removeItem('lb_token'); localStorage.removeItem('lb_user'); }
+    window.location.href = 'login.html';
+  }
+
+  // ── INIT ────────────────────────────────────────────────────
+  loadDashboard();
+</script>
+</body>
+</html>
